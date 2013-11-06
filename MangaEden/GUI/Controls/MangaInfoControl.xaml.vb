@@ -118,6 +118,7 @@ Public Class MangaInfoControl
 
         lblDescription.Text = System.Net.WebUtility.HtmlDecode(_myMangaInfo.manga.description)
         lblHits.Content = _myMangaInfo.manga.hits
+        lblStatus.Content = IIf(_myMangaInfo.manga.status = 2, "Finished", "On Going")
         lblTotalChapters.Content = _myMangaInfo.manga.chapters_len
 
         If _myMangaInfo.manga.chapters_len > 0 Then
@@ -162,6 +163,7 @@ Public Class MangaInfoControl
 
         lblDescription.Text = System.Net.WebUtility.HtmlDecode(_mangaDetails.description)
         lblHits.Content = _mangaDetails.hits
+        lblStatus.Content = IIf(_mangaDetails.status = 2, "Finished", "On Going")
         lblTotalChapters.Content = _mangaDetails.chapters_len
 
         If _mangaDetails.chapters_len > 0 Then

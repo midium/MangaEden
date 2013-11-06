@@ -8,6 +8,10 @@ Public Class MangaBasicInfo
     Public s As Integer 'status
     Public im As String 'image
     Public t As String 'title
+    Enum MangaStatus
+        NotFinished = 2
+        Finished = 1
+    End Enum
 
     Public ReadOnly Property Title As String
         Get
@@ -21,7 +25,7 @@ Public Class MangaBasicInfo
         End Get
     End Property
 
-    Public ReadOnly Property Status As Integer
+    Public ReadOnly Property Status As MangaStatus
         Get
             Return s
         End Get

@@ -3,6 +3,11 @@
 Imports Newtonsoft.Json
 
 Public Class MangaDetails
+    Enum MangaStatus
+        NotFinished = 2
+        Finished = 1
+    End Enum
+
     Public Property status As Integer
     Public Property description As String
     Public Property image As String
