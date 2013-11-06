@@ -2,7 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="MANGA EDEN" Height="631" Width="922" ShowIconOnTitleBar="true" WindowStartupLocation="CenterScreen" Icon="/MangaEden;component/mangaeden.ico" xmlns:my="clr-namespace:MangaEden" MinHeight="631" MinWidth="922">
+    Title="MANGA EDEN" Height="670" Width="922" ShowIconOnTitleBar="true" WindowStartupLocation="CenterScreen" Icon="/MangaEden;component/mangaeden.ico" xmlns:my="clr-namespace:MangaEden" MinHeight="631" MinWidth="922">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -50,7 +50,8 @@
             <ColumnDefinition Width="398*" />
             <ColumnDefinition Width="397*" />
         </Grid.ColumnDefinitions>
-        <my:MangaInfoControl Grid.Column="1" Margin="6,94,12,0" x:Name="micInfo" Height="Auto" />
-        <my:MangaListsControl Margin="0,94,0,0" x:Name="mlcMangas" />
+        <my:MangaInfoControl Grid.Column="1" Margin="6,140,12,0" x:Name="micInfo" Height="Auto" />
+        <my:MangaListsControl Margin="0,133,0,0" x:Name="mlcMangas" />
+        <my:SearchPanel x:Name="searchManga" Grid.ColumnSpan="2" Margin="12,0" Height="127" VerticalAlignment="Top" />
     </Grid>
 </Controls:MetroWindow>

@@ -7,7 +7,7 @@
     <Grid Margin="0,0,0,0">
         <Label Height="32" Margin="170,24,10,0" x:Name="lblTitolo" VerticalAlignment="Top" />
         <Label Height="24" Margin="12,259,227,0" x:Name="lblHits" VerticalAlignment="Top" />
-        <Grid Margin="0,0,0,0" Height="209" Width="154" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Grid Margin="10,11,0,0" Height="209" Width="154" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Image HorizontalAlignment="Center" x:Name="imgCover" VerticalAlignment="Center" Source="/MangaEden;component/Images/nocover.png" Stretch="Uniform"/>
             <Rectangle Stroke="#FF909090"></Rectangle>
         </Grid>
@@ -24,9 +24,6 @@
         <Label Height="30" Margin="170,165,10,0" x:Name="lblReleased" VerticalAlignment="Top" />
         <Label Content="Categories" FontSize="14" FontWeight="Bold" Foreground="#FF41B1E1" Height="27" HorizontalAlignment="Left" Margin="164,190,0,0" x:Name="Label2_Copy2" VerticalAlignment="Top" Width="161" />
         <Rectangle Height="2" Margin="170,212,11,0" x:Name="Rectangle2_Copy2" Stroke="#FF41B1E1" VerticalAlignment="Top" />
-        <ScrollViewer Margin="170,212,10,262" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-            <Label Height="33"  x:Name="lblCategories" VerticalAlignment="Top" />
-        </ScrollViewer>
         <Label Content="Description" FontSize="14" FontWeight="Bold" Foreground="#FF41B1E1" Height="27" HorizontalAlignment="Left" Margin="6,378,0,0" x:Name="Label2_Copy3" VerticalAlignment="Top" Width="271" />
         <Rectangle Height="2" Margin="12,400,12,0" x:Name="Rectangle2_Copy3" Stroke="#FF41B1E1" VerticalAlignment="Top" />
         <ScrollViewer Margin="14,403,11,5">
@@ -57,5 +54,8 @@
         </Button>
         <Label Height="27" Margin="170,259,69,0" x:Name="lblStatus" VerticalAlignment="Top" />
         <Label Content="Status" FontSize="14" FontWeight="Bold" Foreground="#FF41B1E1" Height="27" HorizontalAlignment="Left" Margin="165,237,0,0" x:Name="Label2_Copy7" VerticalAlignment="Top" Width="188" />
+        <ScrollViewer Margin="170,212,10,253" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+            <Label Height="41" x:Name="lblCategories" VerticalAlignment="Top" />
+        </ScrollViewer>
     </Grid>
 </UserControl>

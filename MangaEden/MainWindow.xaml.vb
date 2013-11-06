@@ -179,4 +179,51 @@ Class MainWindow
     Private Sub mlcMangas_MyMangaSelected(sender As Object, e As MyMangaInfo) Handles mlcMangas.MyMangaSelected
         micInfo.ShowMyMangaInfo(e)
     End Sub
+
+    Private Sub searchManga_Search(sender As Object, e As SearchParams) Handles searchManga.Search
+        'Using LinQ to get the manga with that title from the availables one
+        Dim finded = From value In _availableMangas.manga
+                     Where LCase(value.Title) Like LCase(e.Title) & "*"
+
+        Dim findedMangas As MangaBasicInfo() = Nothing
+        Dim iCnt As Integer = 0
+        'I need to loop to get the control to the elements (became MangaBasicInfo object)
+        For Each el In finded
+            ReDim Preserve findedMangas(iCnt)
+            findedMangas(iCnt) = el
+
+            iCnt += 1
+        Next
+
+        If Not findedMangas Is Nothing Then
+            Dim newMangaList As MangaList = New MangaList
+            newMangaList.manga = findedMangas
+            mlcMangas.showMangaList(newMangaList)
+        Else
+            mlcMangas.showMangaList(Nothing)
+        End If
+
+        'Using LinQ to get the manga with that title from my mangas one
+        Dim myFinded = From value In _myMangas.myManga
+                     Where LCase(value.Title) Like LCase(e.Title) & "*"
+
+        Dim myFindedMangas As MyMangaInfo() = Nothing
+        iCnt = 0
+        'I need to loop to get the control to the elements (became MangaBasicInfo object)
+        For Each el In myFinded
+            ReDim Preserve myFindedMangas(iCnt)
+            myFindedMangas(iCnt) = el
+
+            iCnt += 1
+        Next
+
+        If Not myFindedMangas Is Nothing Then
+            Dim newMyMangaList As MyManga = New MyManga
+            newMyMangaList.myManga = myFindedMangas
+            mlcMangas.showMyMangaList(newMyMangaList)
+        Else
+            mlcMangas.showMyMangaList(Nothing)
+        End If
+
+    End Sub
 End Class

@@ -85,6 +85,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="GUI\Controls\SearchPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GUI\Forms\MangaChapters.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -113,11 +117,15 @@
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\SearchParams.vb" />
     <Compile Include="GUI\Controls\MangaInfoControl.xaml.vb">
       <DependentUpon>MangaInfoControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\Controls\MangaListsControl.xaml.vb">
       <DependentUpon>MangaListsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Controls\SearchPanel.xaml.vb">
+      <DependentUpon>SearchPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\Forms\MangaChapters.xaml.vb">
       <DependentUpon>MangaChapters.xaml</DependentUpon>
@@ -282,6 +290,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\magnifying-glass.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

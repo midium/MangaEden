@@ -20,14 +20,20 @@ Public Class MangaListsControl
 #Region "Routines"
     Public Function showMangaList(ByVal mangaList As MangaList) As Boolean
         lstMangas.ItemsSource = Nothing
-        lstMangas.ItemsSource = mangaList.manga
+
+        If Not mangaList Is Nothing Then
+            lstMangas.ItemsSource = mangaList.manga
+        End If
 
         Return True
     End Function
 
     Public Function showMyMangaList(ByVal myMangaList As MyManga) As Boolean
         lstMyMangas.ItemsSource = Nothing
-        lstMyMangas.ItemsSource = myMangaList.myManga
+
+        If Not myMangaList Is Nothing Then
+            lstMyMangas.ItemsSource = myMangaList.myManga
+        End If
 
         Return True
     End Function
