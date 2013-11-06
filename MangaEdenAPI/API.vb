@@ -65,7 +65,7 @@ Public Class API
         Return MyMangaLogin.doLogout(_logout)
     End Function
 
-    Public Function MyMangas() As MyManga Implements IApi.MyMangas
+    Public Function getMyMangas() As MyManga Implements IApi.MyMangas
 
         'Doing login
         Dim sLoginUrl As String = String.Format(_login, _username, _password)

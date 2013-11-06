@@ -4,6 +4,7 @@ Imports MangaEdenAPI
 Imports SettingsManager
 Imports System.Threading
 Imports WebElements
+Imports System.Linq
 
 Class MainWindow
 
@@ -25,6 +26,10 @@ Class MainWindow
 
     Private Delegate Function ApplySettings()
     Private _applySettings As ApplySettings
+
+    Private Delegate Function myMangaIDs(mine As MyManga, available As MangaList)
+    Private _myMangaIDs As myMangaIDs
+
 #End Region
 
     Public Function firstLoad() As Boolean
@@ -34,6 +39,9 @@ Class MainWindow
         Dispatcher.Invoke(_loader, "Loading application settings ...")
         _settingsManager = New AppManager
         _settingsManager.LoadSettings()
+
+        Dispatcher.Invoke(_loader, "Downloading updated manga list from MangaEden.com ...")
+        _availableMangas = _api.getMangaList(_settingsManager.Language)
 
         If _settingsManager.AutomaticLogin Then
             Dispatcher.Invoke(_loader, "Performing user login ...")
@@ -47,14 +55,15 @@ Class MainWindow
             Else
                 'Loading MyMangas just if login works
                 Dispatcher.Invoke(_loader, "Loading my Mangas ...")
-                _myMangas = _api.MyMangas()
+                _myMangas = _api.getMyMangas()
+
+                'Copying manga ID to myMangas
+                Dispatcher.Invoke(_loader, "Retrieving my Mangas IDs ...")
+                Dispatcher.Invoke(_myMangaIDs, _myMangas, _availableMangas)
 
             End If
 
         End If
-
-        'Dispatcher.Invoke(_loader, "Downloading updated manga list from MangaEden.com ...")
-        _availableMangas = _api.getMangaList(_settingsManager.Language)
 
         Dispatcher.Invoke(_loader, "Applying app settings and showing mangas ...")
         Dispatcher.Invoke(_applySettings)
@@ -97,6 +106,7 @@ Class MainWindow
         _loader = New ShowDelegate(AddressOf showStatus)
         _finish = New LoadingFinished(AddressOf loadingComplete)
         _applySettings = New ApplySettings(AddressOf applyAppSettings)
+        _myMangaIDs = New myMangaIDs(AddressOf setMyMangaIDs)
 
         'Initializing thread
         _loadThread = New Thread(AddressOf firstLoad)
@@ -139,6 +149,24 @@ Class MainWindow
 
     Private Function loadingComplete() As Boolean
         RaiseEvent LoadingCompleted()
+
+        Return False
+    End Function
+
+    Private Function setMyMangaIDs(mine As MyManga, available As MangaList) As Boolean
+        For Each i As MyMangaInfo In mine.myManga
+            Dim mangaTitle As String = i.Title
+
+            'Using LinQ to get the manga with that title from the availables one
+            Dim result = From value In available.manga
+                         Where value.Title = mangaTitle
+
+            'I need to loop to get the control to the element (became MangaBasicInfo object)
+            For Each el In result
+                i.ID = el.ID
+            Next
+
+        Next
 
         Return False
     End Function

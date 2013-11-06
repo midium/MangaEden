@@ -7,6 +7,7 @@ Public Class MyMangaInfo
     Public Property new_chapter_to_read As Object
     Public Property manga As MyMangaDetails
     Public Property latest_chapter As MyMangaLatestChapter
+    Public Property ID As String
 
     Public Overrides Function ToString() As String
         If Not manga Is Nothing Then

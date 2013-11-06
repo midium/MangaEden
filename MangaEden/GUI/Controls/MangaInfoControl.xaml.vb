@@ -236,7 +236,7 @@ Public Class MangaInfoControl
         Dim frmChapter As MangaChapters
 
         If _flgMyManga Then
-            frmChapter = New MangaChapters(_myMangaInfo, "", _flgMyManga)
+            frmChapter = New MangaChapters(_myMangaInfo, _myMangaInfo.ID, _flgMyManga)
         Else
             frmChapter = New MangaChapters(_mangaDetails, _mangaInfo.ID, _flgMyManga)
         End If
