@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API.vb" />
+    <Compile Include="DataClasses\ChapterImages.vb" />
     <Compile Include="DataClasses\MangaBasicInfo.vb" />
     <Compile Include="DataClasses\MangaChaptersDetails.vb" />
     <Compile Include="DataClasses\MangaList.vb" />

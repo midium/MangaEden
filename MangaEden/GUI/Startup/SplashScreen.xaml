@@ -6,9 +6,10 @@
         <Image Name="Image1" Stretch="Fill" Source="/MangaEden;component/Images/jeeg_splash.jpg" Margin="-1,0,0,0" Height="397" VerticalAlignment="Top" />
         <Label Content="Manga Eden" Height="63" HorizontalAlignment="Left" Margin="393,0,0,0" Name="Label1" VerticalAlignment="Top" Width="191" FontSize="32" />
         <Label Content="v.:" Height="27" HorizontalAlignment="Left" Margin="486,46,0,0" Name="lblVersion" VerticalAlignment="Top" Width="91" FlowDirection="LeftToRight" HorizontalContentAlignment="Right" />
-        <Grid Width="604" Height="28" Margin="0,359,0,0" >
+        <Grid Width="604" Height="28" Margin="0,354,0,15" >
             <Border Width="604" Height="28"  Opacity="0.7" Background="White" BorderBrush="#FFA3A3A3" BorderThickness="1" />
             <Label Content="Status:" Height="28" Margin="0,0,0,0" Name="lblStatus" VerticalAlignment="Top" FontWeight="Bold" Opacity="1"/>
         </Grid>
+        <Rectangle Stroke="#FF6C6C6C"></Rectangle>
     </Grid>
 </Window>

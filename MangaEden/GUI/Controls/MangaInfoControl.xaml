@@ -9,6 +9,7 @@
         <Label Height="24" Margin="12,259,227,0" x:Name="lblHits" VerticalAlignment="Top" />
         <Grid Margin="0,0,0,0" Height="209" Width="154" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Image HorizontalAlignment="Center" x:Name="imgCover" VerticalAlignment="Center" Source="/MangaEden;component/Images/nocover.png" Stretch="Uniform"/>
+            <Rectangle Stroke="#FF909090"></Rectangle>
         </Grid>
         <Label Content="Title" Height="27" HorizontalAlignment="Left" Margin="164,2,0,0" x:Name="Label1" VerticalAlignment="Top" Width="161" FontWeight="Bold" FontSize="14" Foreground="#FF41B1E1" />
         <Rectangle Height="2" Margin="170,24,11,0" x:Name="Rectangle1" Stroke="#FF41B1E1" VerticalAlignment="Top" />
@@ -44,12 +45,12 @@
                 <Image Height="16" Margin="0,-1,0,0" Name="imgChapters" Source="/MangaEden;component/Images/book.png" Stretch="Uniform" Width="16" />
             </ContentControl>
         </Button>
-        <Button Height="25" HorizontalAlignment="Right" Margin="0,357,39,0" Name="btDownload" ToolTip="Show all Manga Chapters" VerticalAlignment="Top" Visibility="Collapsed" Width="25" Padding="0">
+        <Button Height="25" HorizontalAlignment="Right" Margin="0,357,39,0" Name="btDownload" ToolTip="Download Last Chapter" VerticalAlignment="Top" Visibility="Collapsed" Width="25" Padding="0">
             <ContentControl>
                 <Image Height="16" Margin="0,-1,0,0" Name="Image1" Source="/MangaEden;component/Images/download.png" Stretch="Uniform" Width="16" />
             </ContentControl>
         </Button>
-        <Button Height="25" HorizontalAlignment="Right" Margin="0,357,11,0" Name="btPlay" ToolTip="Show all Manga Chapters" VerticalAlignment="Top" Visibility="Collapsed" Width="25" Padding="0">
+        <Button Height="25" HorizontalAlignment="Right" Margin="0,357,11,0" Name="btPlay" ToolTip="Play Last Chapter" VerticalAlignment="Top" Visibility="Collapsed" Width="25" Padding="0">
             <ContentControl>
                 <Image Height="16" Margin="0,-1,0,0" Name="Image2" Source="/MangaEden;component/Images/play.png" Stretch="Uniform" Width="16" />
             </ContentControl>

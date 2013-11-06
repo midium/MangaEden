@@ -39,6 +39,7 @@ Public Class MangaChapters
 
     End Sub
 
+#Region "Form and control events"
     Private Sub MangaChapters_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         If _flgMyManga Then
             lblMangaTitle.Content = String.Format("{0} - {1} chapters available", _mangaInfo.title, _mangaInfo.manga.chapters_len)
@@ -52,6 +53,22 @@ Public Class MangaChapters
     Private Sub btClose_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btClose.Click
         Me.Close()
     End Sub
+
+    Private Sub lstChapters_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles lstChapters.SelectionChanged
+        btDownload.IsEnabled = True
+        btView.IsEnabled = True
+    End Sub
+
+    Private Sub btView_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btView.Click
+
+        Dim Chapter As MangaChaptersDetails = lstChapters.SelectedItem
+
+        Dim frmPlayer As ChapterViewer = New ChapterViewer(Chapter.ChapterID, _mangaInfo.title, Chapter.Title, Chapter.Number)
+        frmPlayer.ShowDialog()
+        frmPlayer = Nothing
+    End Sub
+
+#End Region
 
 #Region "Thread and Delegated Routines"
     Private Function collectMangaChapters(ByVal chapters As List(Of List(Of Object))) As Boolean
@@ -96,4 +113,5 @@ Public Class MangaChapters
         Return True
     End Function
 #End Region
+
 End Class

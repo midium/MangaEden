@@ -9,4 +9,6 @@
     Function Login(ByVal UserName As String, ByVal Password As String) As String
     Function Logout() As Boolean
     Function MyMangas() As MyManga
+    Function getImage(ByVal ImagePath As String) As String
+    Function getChapterImages(ByVal chapterID As String) As ChapterImages
 End Interface

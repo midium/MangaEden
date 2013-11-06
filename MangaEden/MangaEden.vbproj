@@ -89,6 +89,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="GUI\Forms\ChapterViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GUI\Startup\SplashScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -117,6 +121,9 @@
     </Compile>
     <Compile Include="GUI\Forms\MangaChapters.xaml.vb">
       <DependentUpon>MangaChapters.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Forms\ChapterViewer.xaml.vb">
+      <DependentUpon>ChapterViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\Startup\SplashScreen.xaml.vb">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
@@ -269,6 +276,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\back.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\next.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

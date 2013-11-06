@@ -245,4 +245,19 @@ Public Class MangaInfoControl
         frmChapter.Close()
         frmChapter = Nothing
     End Sub
+
+    Private Sub btPlay_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btPlay.Click
+        Dim frmPlay As ChapterViewer = Nothing
+
+        If _flgMyManga Then
+            frmPlay = New ChapterViewer(_myMangaInfo.latest_chapter.id, _myMangaInfo.Title, _myMangaInfo.latest_chapter.title, _myMangaInfo.latest_chapter.number)
+
+        Else
+            frmPlay = New ChapterViewer(_mangaDetails.chapters(0)(3), _mangaDetails.title, _mangaDetails.chapters(0)(2), _mangaDetails.chapters(0)(0))
+
+        End If
+
+        frmPlay.ShowDialog()
+        frmPlay = Nothing
+    End Sub
 End Class

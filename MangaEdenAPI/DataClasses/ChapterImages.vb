@@ -1,0 +1,19 @@
+﻿Option Explicit On
+
+Public Class ChapterImages
+    Public Property images() As List(Of List(Of Object))
+
+    Public Sub Sort()
+        Dim tmp As Object = Nothing
+
+        For i As Integer = 0 To images.Count - 2
+            For j As Integer = i + 1 To images.Count - 1
+                If CInt(images(i)(0)) > CInt(images(j)(0)) Then
+                    tmp = images(j)
+                    images(j) = images(i)
+                    images(i) = tmp
+                End If
+            Next
+        Next
+    End Sub
+End Class

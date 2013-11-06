@@ -86,7 +86,7 @@ Public Class API
     ''' <param name="ImagePath">The remote image path</param>
     ''' <returns>The path to the temporary file</returns>
     ''' <remarks></remarks>
-    Public Function getImage(ByVal ImagePath As String) As String
+    Public Function getImage(ByVal ImagePath As String) As String Implements IApi.getImage
         Dim result As String = ""
         Dim remoteImagePath As String = String.Format(_imgBase, ImagePath)
         Dim localImagePath As String = String.Format("{0}\{1}", System.IO.Path.GetTempPath, extractFileName(ImagePath))
@@ -100,6 +100,18 @@ Public Class API
                 result = localImagePath
             End If
         End If
+
+        Return result
+    End Function
+
+    Public Function getChapterImages(ByVal chapterID As String) As ChapterImages Implements IApi.getChapterImages
+        Dim result As ChapterImages = Nothing
+
+        'Downloading the page
+        Dim jsonPage As String = DataDownloader.getWebPage(String.Format(_baseUrl, String.Format(_chapter, chapterID)))
+
+        'Rendering chapter json to related class
+        result = JsonConvert.DeserializeObject(Of ChapterImages)(jsonPage)
 
         Return result
     End Function
