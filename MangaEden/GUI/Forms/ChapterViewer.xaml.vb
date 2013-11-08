@@ -55,10 +55,10 @@ Public Class ChapterViewer
 
     Private Function LoadChapterImage(ByVal imageIndex As Integer) As Boolean
 
-        If imageIndex < 0 Then imageIndex = 0
-        If imageIndex > _chapterImages.images.Count - 1 Then imageIndex = _chapterImages.images.Count - 1
+        If imageIndex < 0 Then _imageIndex = 0
+        If imageIndex > _chapterImages.images.Count - 1 Then _imageIndex = _chapterImages.images.Count - 1
 
-        Dim localPath As String = _meAPI.getImage(_chapterImages.images(imageIndex)(1))
+        Dim localPath As String = _meAPI.getImage(_chapterImages.images(_imageIndex)(1))
         If localPath <> "" Then
             Dim localURI As New Uri(localPath)
             Dim image As New BitmapImage(localURI)
@@ -69,11 +69,11 @@ Public Class ChapterViewer
 
         End If
 
-        If imageIndex = 0 Then
+        If _imageIndex = 0 Then
             imgPrev.Visibility = Windows.Visibility.Collapsed
             imgNext.Visibility = Windows.Visibility.Visible
 
-        ElseIf imageIndex > 0 And imageIndex < _chapterImages.images.Count - 1 Then
+        ElseIf _imageIndex > 0 And _imageIndex < _chapterImages.images.Count - 1 Then
             imgPrev.Visibility = Windows.Visibility.Visible
             imgNext.Visibility = Windows.Visibility.Visible
 
