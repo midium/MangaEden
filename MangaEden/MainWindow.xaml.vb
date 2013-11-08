@@ -173,11 +173,11 @@ Class MainWindow
 #End Region
 
     Private Sub mlcMangas_MangaSelected(sender As Object, e As MangaEdenAPI.MangaBasicInfo) Handles mlcMangas.MangaSelected
-        micInfo.showMangaInfo(e)
+        micInfo.showMangaInfo(e.ID)
     End Sub
 
     Private Sub mlcMangas_MyMangaSelected(sender As Object, e As MyMangaInfo) Handles mlcMangas.MyMangaSelected
-        micInfo.showMyMangaInfo(e)
+        micInfo.showMangaInfo(e.ID)
     End Sub
 
     Private Sub searchManga_Search(sender As Object, e As SearchParams) Handles searchManga.Search

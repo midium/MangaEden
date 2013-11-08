@@ -7,8 +7,7 @@ Imports System.Drawing
 
 Public Class MangaInfoControl
     Private _coverPath As String
-    Private _myMangaInfo As MyMangaInfo
-    Private _mangaInfo As MangaBasicInfo
+    Private _mangaID As String
     Private _mangaDetails As MangaDetails
     Private _flgMyManga As Boolean
 
@@ -23,9 +22,6 @@ Public Class MangaInfoControl
     Private Delegate Function DownloadCover(ByVal CoverPath As String)
     Private _downloadCover As DownloadCover
 
-    Private Delegate Function PopulateMyMangaData()
-    Private _populateMyMangaData As PopulateMyMangaData
-
     Private Delegate Function PopulateMangaData()
     Private _populateMangaData As PopulateMangaData
 
@@ -36,21 +32,6 @@ Public Class MangaInfoControl
 
 #Region "Routines"
 #Region "Thread and delegates"
-    Private Function CollectAndShowMyMangaInfo() As Boolean
-        RaiseEvent CollectInfoBegin(Me)
-
-        'Showing manga information
-        Dispatcher.Invoke(_populateMyMangaData)
-
-        'Trying download cover
-        _coverPath = _myMangaInfo.manga.image
-        Dispatcher.Invoke(_downloadCover, _coverPath)
-
-        RaiseEvent CollectInfoEnd(Me)
-
-        Return True
-    End Function
-
     Private Function CollectAndShowMangaInfo() As Boolean
         RaiseEvent CollectInfoBegin(Me)
 
@@ -58,7 +39,7 @@ Public Class MangaInfoControl
         Dispatcher.Invoke(_loadMangaDetails)
 
         'Trying download cover
-        _coverPath = _mangaInfo.im
+        _coverPath = _mangaDetails.image
         Dispatcher.Invoke(_downloadCover, _coverPath)
 
         RaiseEvent CollectInfoEnd(Me)
@@ -69,7 +50,7 @@ Public Class MangaInfoControl
     Private Function collectMangaDetails() As Boolean
         Dim meApi As New API
 
-        _mangaDetails = meApi.getMangaDetails(_mangaInfo.ID)
+        _mangaDetails = meApi.getMangaDetails(_mangaID)
 
         'Showing manga information
         Dispatcher.Invoke(_populateMangaData)
@@ -101,51 +82,6 @@ Public Class MangaInfoControl
         Else
             imgCover.Source = Nothing
 
-        End If
-
-        Return True
-    End Function
-
-    Private Function showMyMangaInfo() As Boolean
-        lblTitolo.Content = _myMangaInfo.manga.title
-
-        If Not _myMangaInfo.manga.author_kw Is Nothing And IsArray(_myMangaInfo.manga.author_kw) Then
-            lblAuthor.Content = ComposeName(_myMangaInfo.manga.author_kw)
-        Else
-            lblAuthor.Content = _myMangaInfo.manga.author
-        End If
-
-        If Not _myMangaInfo.manga.author_kw Is Nothing And IsArray(_myMangaInfo.manga.artist_kw) Then
-            lblArtist.Content = ComposeName(_myMangaInfo.manga.artist_kw)
-        Else
-            lblArtist.Content = _myMangaInfo.manga.artist
-        End If
-
-        lblReleased.Content = _myMangaInfo.manga.released
-
-        If Not _myMangaInfo.manga.categories Is Nothing And IsArray(_myMangaInfo.manga.categories) Then
-            lblCategories.Content = Join(_myMangaInfo.manga.categories, ", ")
-        End If
-
-        lblDescription.Text = System.Net.WebUtility.HtmlDecode(_myMangaInfo.manga.description)
-        lblHits.Content = _myMangaInfo.manga.hits
-        lblStatus.Content = IIf(_myMangaInfo.manga.status = 2, "Finished", "On Going")
-        lblTotalChapters.Content = _myMangaInfo.manga.chapters_len
-
-        If _myMangaInfo.manga.chapters_len > 0 Then
-            btChapters.Visibility = Windows.Visibility.Visible
-        Else
-            btChapters.Visibility = Windows.Visibility.Collapsed
-        End If
-
-        If Not _myMangaInfo.latest_chapter Is Nothing Then
-            lblLatestChapter.Content = String.Format("{0} - {1} [{2}]", _myMangaInfo.latest_chapter.number, _myMangaInfo.latest_chapter.title, _myMangaInfo.latest_chapter.LastChapterDate)
-            btPlay.Visibility = Windows.Visibility.Visible
-            btDownload.Visibility = Windows.Visibility.Visible
-        Else
-            lblLatestChapter.Content = ""
-            btPlay.Visibility = Windows.Visibility.Collapsed
-            btDownload.Visibility = Windows.Visibility.Collapsed
         End If
 
         Return True
@@ -198,19 +134,10 @@ Public Class MangaInfoControl
 #End Region
 
 #Region "Public"
-    Public Sub ShowMyMangaInfo(ByVal myManga As MyMangaInfo)
-        'Saving image path and starting dowloading thread
-        _flgMyManga = True
-        _myMangaInfo = myManga
-
-        _loadThread = New Thread(AddressOf CollectAndShowMyMangaInfo)
-        _loadThread.Start()
-    End Sub
-
-    Public Sub ShowMangaInfo(ByVal Manga As MangaBasicInfo)
+    Public Sub ShowMangaInfo(ByVal MangaID As String)
         'Saving image path and starting dowloading thread
         _flgMyManga = False
-        _mangaInfo = Manga
+        _mangaID = MangaID
 
         _loadThread = New Thread(AddressOf CollectAndShowMangaInfo)
         _loadThread.Start()
@@ -237,7 +164,6 @@ Public Class MangaInfoControl
 
         ' Add any initialization after the InitializeComponent() call.
         _downloadCover = New DownloadCover(AddressOf searchAndDownloadCover)
-        _populateMyMangaData = New PopulateMyMangaData(AddressOf showMyMangaInfo)
         _populateMangaData = New PopulateMangaData(AddressOf showMangaInfo)
         _loadMangaDetails = New LoadMangaDetails(AddressOf collectMangaDetails)
 
@@ -246,11 +172,7 @@ Public Class MangaInfoControl
     Private Sub btChapters_Click(sender As Object, e As System.Windows.RoutedEventArgs) Handles btChapters.Click
         Dim frmChapter As MangaChapters
 
-        If _flgMyManga Then
-            frmChapter = New MangaChapters(_myMangaInfo, _myMangaInfo.ID, _flgMyManga)
-        Else
-            frmChapter = New MangaChapters(_mangaDetails, _mangaInfo.ID, _flgMyManga)
-        End If
+        frmChapter = New MangaChapters(_mangaDetails, _mangaID, _flgMyManga)
 
         frmChapter.ShowDialog()
         frmChapter.Close()
@@ -260,13 +182,7 @@ Public Class MangaInfoControl
     Private Sub btPlay_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btPlay.Click
         Dim frmPlay As ChapterViewer = Nothing
 
-        If _flgMyManga Then
-            frmPlay = New ChapterViewer(_myMangaInfo.latest_chapter.id, _myMangaInfo.Title, _myMangaInfo.latest_chapter.title, _myMangaInfo.latest_chapter.number)
-
-        Else
-            frmPlay = New ChapterViewer(_mangaDetails.chapters(0)(3), _mangaDetails.title, _mangaDetails.chapters(0)(2), _mangaDetails.chapters(0)(0))
-
-        End If
+        frmPlay = New ChapterViewer(_mangaDetails.chapters(0)(3), _mangaDetails.title, _mangaDetails.chapters(0)(2), _mangaDetails.chapters(0)(0))
 
         frmPlay.ShowDialog()
         frmPlay = Nothing
