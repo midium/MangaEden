@@ -4,6 +4,7 @@ Imports MangaEdenAPI
 Imports System.Globalization
 Imports System.Threading
 Imports System.Drawing
+Imports System.IO
 
 Public Class MangaInfoControl
     Private _coverPath As String
@@ -68,23 +69,30 @@ Public Class MangaInfoControl
 
                 Dim localPath As String = meAPI.getImage(CoverPath)
                 If localPath <> "" Then
-                    Dim localURI As New Uri(localPath)
-                    Dim image As New BitmapImage(localURI)
+                    Dim image As BitmapImage
 
-                    imgCover.Source = image
+                    If File.Exists(localPath) Then
+                        Dim localURI As New Uri(localPath)
 
-                    image = Nothing
+                        image = New BitmapImage(localURI)
+                    Else
+                        image = Nothing
+                    End If
+
+                    imgCover.Source = Image
+
+                    Image = Nothing
 
                 End If
 
+                End If
+
+            Else
+                imgCover.Source = Nothing
+
             End If
 
-        Else
-            imgCover.Source = Nothing
-
-        End If
-
-        Return True
+            Return True
     End Function
 
     Private Function showMangaInfo() As Boolean
@@ -172,7 +180,7 @@ Public Class MangaInfoControl
     Private Sub btChapters_Click(sender As Object, e As System.Windows.RoutedEventArgs) Handles btChapters.Click
         Dim frmChapter As MangaChapters
 
-        frmChapter = New MangaChapters(_mangaDetails, _mangaID, _flgMyManga)
+        frmChapter = New MangaChapters(_mangaDetails)
 
         frmChapter.ShowDialog()
         frmChapter.Close()

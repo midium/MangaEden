@@ -5,9 +5,6 @@ Imports System.Threading
 
 Public Class MangaChapters
 
-    Private _mangaInfo As Object
-    Private _mangaID As String
-    Private _flgMyManga As Boolean
     Private _mangaDetails As MangaDetails
     Private _mangaChapters As MangaChaptersDetails()
 
@@ -22,15 +19,14 @@ Public Class MangaChapters
 
 #End Region
 
-    Public Sub New(ByVal mangaData As Object, ByVal mangaID As String, ByVal flgMyManga As Boolean)
+    Public Sub New(ByVal mangaData As MangaDetails)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        _mangaInfo = mangaData
-        _mangaID = mangaID
-        _flgMyManga = flgMyManga
+        _mangaDetails = mangaData
+        _mangaChapters = Nothing
 
         'Initializing thread and delegated routines
         _loadMangaDetails = New LoadMangaDetails(AddressOf collectMangaDetails)
@@ -41,12 +37,8 @@ Public Class MangaChapters
 
 #Region "Form and control events"
     Private Sub MangaChapters_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
-        If _flgMyManga Then
-            lblMangaTitle.Content = String.Format("{0} - {1} chapters available", _mangaInfo.title, _mangaInfo.manga.chapters_len)
-        Else
-            lblMangaTitle.Content = String.Format("{0} - {1} chapters available", _mangaInfo.title, _mangaInfo.chapters_len)
-        End If
-
+        lblMangaTitle.Content = String.Format("{0} - {1} chapters available", _mangaDetails.title, _mangaDetails.chapters_len)
+        
         _loadThread.Start()
     End Sub
 
@@ -63,7 +55,7 @@ Public Class MangaChapters
 
         Dim Chapter As MangaChaptersDetails = lstChapters.SelectedItem
 
-        Dim frmPlayer As ChapterViewer = New ChapterViewer(Chapter.ChapterID, _mangaInfo.title, Chapter.Title, Chapter.Number)
+        Dim frmPlayer As ChapterViewer = New ChapterViewer(Chapter.ChapterID, _mangaDetails.title, Chapter.Title, Chapter.Number)
         frmPlayer.ShowDialog()
         frmPlayer = Nothing
     End Sub
@@ -104,8 +96,6 @@ Public Class MangaChapters
 
     Private Function collectMangaDetails() As Boolean
         Dim meApi As New API
-
-        _mangaDetails = meApi.getMangaDetails(_mangaID)
 
         'Showing manga information
         Dispatcher.Invoke(_extractMangaChapters, _mangaDetails.chapters)
