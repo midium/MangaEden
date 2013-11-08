@@ -12,6 +12,11 @@ Public Class MangaInfoControl
     Private _mangaDetails As MangaDetails
     Private _flgMyManga As Boolean
 
+#Region "Events declaration"
+    Public Event CollectInfoBegin(ByVal sender As Object)
+    Public Event CollectInfoEnd(ByVal sender As Object)
+#End Region
+
 #Region "Thread and delegate function declaration"
     Private _loadThread As Thread
 
@@ -32,6 +37,7 @@ Public Class MangaInfoControl
 #Region "Routines"
 #Region "Thread and delegates"
     Private Function CollectAndShowMyMangaInfo() As Boolean
+        RaiseEvent CollectInfoBegin(Me)
 
         'Showing manga information
         Dispatcher.Invoke(_populateMyMangaData)
@@ -40,10 +46,13 @@ Public Class MangaInfoControl
         _coverPath = _myMangaInfo.manga.image
         Dispatcher.Invoke(_downloadCover, _coverPath)
 
+        RaiseEvent CollectInfoEnd(Me)
+
         Return True
     End Function
 
     Private Function CollectAndShowMangaInfo() As Boolean
+        RaiseEvent CollectInfoBegin(Me)
 
         'First I need to collect details of the manga
         Dispatcher.Invoke(_loadMangaDetails)
@@ -51,6 +60,8 @@ Public Class MangaInfoControl
         'Trying download cover
         _coverPath = _mangaInfo.im
         Dispatcher.Invoke(_downloadCover, _coverPath)
+
+        RaiseEvent CollectInfoEnd(Me)
 
         Return True
     End Function

@@ -54,7 +54,7 @@
         </Button>
         <Label Height="27" Margin="170,259,69,0" x:Name="lblStatus" VerticalAlignment="Top" />
         <Label Content="Status" FontSize="14" FontWeight="Bold" Foreground="#FF41B1E1" Height="27" HorizontalAlignment="Left" Margin="165,237,0,0" x:Name="Label2_Copy7" VerticalAlignment="Top" Width="188" />
-        <ScrollViewer Margin="170,212,10,253" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+        <ScrollViewer Margin="170,212,10,267" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
             <Label Height="41" x:Name="lblCategories" VerticalAlignment="Top" />
         </ScrollViewer>
     </Grid>

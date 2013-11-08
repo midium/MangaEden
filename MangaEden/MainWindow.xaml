@@ -50,8 +50,8 @@
             <ColumnDefinition Width="398*" />
             <ColumnDefinition Width="397*" />
         </Grid.ColumnDefinitions>
-        <my:MangaInfoControl Grid.Column="1" Margin="6,140,12,0" x:Name="micInfo" Height="Auto" />
-        <my:MangaListsControl Margin="0,133,0,0" x:Name="mlcMangas" />
-        <my:SearchPanel x:Name="searchManga" Grid.ColumnSpan="2" Margin="12,0" Height="127" VerticalAlignment="Top" />
+        <my:MangaInfoControl Grid.Column="1" Margin="6,115,12,10" x:Name="micInfo" Height="Auto" />
+        <my:MangaListsControl Margin="0,108,0,10" x:Name="mlcMangas" />
+        <my:SearchPanel x:Name="searchManga" Grid.ColumnSpan="2" Height="110" Margin="10,0,12,0" VerticalAlignment="Top" Width="Auto"/>
     </Grid>
 </Controls:MetroWindow>

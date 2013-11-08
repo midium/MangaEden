@@ -7,8 +7,10 @@ Public Class SearchPanel
     Private Sub btFind_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btFind.Click
         Dim params As SearchParams = New SearchParams
 
+        'Recording user search parameters
         params.Title = txtTitle.Text
 
+        'Performin search
         RaiseEvent Search(sender, params)
 
     End Sub

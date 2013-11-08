@@ -173,11 +173,11 @@ Class MainWindow
 #End Region
 
     Private Sub mlcMangas_MangaSelected(sender As Object, e As MangaEdenAPI.MangaBasicInfo) Handles mlcMangas.MangaSelected
-        micInfo.ShowMangaInfo(e)
+        micInfo.showMangaInfo(e)
     End Sub
 
     Private Sub mlcMangas_MyMangaSelected(sender As Object, e As MyMangaInfo) Handles mlcMangas.MyMangaSelected
-        micInfo.ShowMyMangaInfo(e)
+        micInfo.showMyMangaInfo(e)
     End Sub
 
     Private Sub searchManga_Search(sender As Object, e As SearchParams) Handles searchManga.Search
@@ -225,5 +225,17 @@ Class MainWindow
             mlcMangas.showMyMangaList(Nothing)
         End If
 
+    End Sub
+
+    Private Sub micInfo_CollectInfoBegin(sender As Object) Handles micInfo.CollectInfoBegin
+        Dispatcher.Invoke(Sub() UICursor(Cursors.Wait))
+    End Sub
+
+    Private Sub micInfo_CollectInfoEnd(sender As Object) Handles micInfo.CollectInfoEnd
+        Dispatcher.Invoke(Sub() UICursor(Cursors.Arrow))
+    End Sub
+
+    Private Sub UICursor(ByVal newCursor As Cursor)
+        Me.Cursor = newCursor
     End Sub
 End Class
