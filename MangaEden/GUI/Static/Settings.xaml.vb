@@ -2,6 +2,7 @@
 
 Imports MangaEdenAPI
 Imports System.Windows.Threading
+Imports WPFFolderBrowser
 
 Public Class Settings
 
@@ -104,5 +105,12 @@ Public Class Settings
         Next
         cboNewChapters.SelectedIndex = iCount
         
+    End Sub
+
+    Private Sub btFolder_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btFolder.Click
+        Dim dlg As New WPFFolderBrowserDialog("Select Folder")
+        If dlg.ShowDialog Then
+            txtFolder.Text = dlg.FileName
+        End If
     End Sub
 End Class

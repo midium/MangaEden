@@ -195,4 +195,17 @@ Public Class MangaInfoControl
         frmPlay.ShowDialog()
         frmPlay = Nothing
     End Sub
+
+    Private Sub btDownload_Click(sender As Object, e As System.Windows.RoutedEventArgs) Handles btDownload.Click
+        Dim chapterDetails As New MangaChaptersDetails
+        chapterDetails.ChapterID = _mangaDetails.chapters(0)(3)
+        chapterDetails.Title = _mangaDetails.chapters(0)(2)
+        chapterDetails.Number = _mangaDetails.chapters(0)(0)
+        chapterDetails.chapter_date = _mangaDetails.chapters(0)(1)
+
+        Dim downloader As New DownloadPage(_mangaDetails.title, chapterDetails)
+        downloader.ShowDialog()
+        downloader = Nothing
+
+    End Sub
 End Class
