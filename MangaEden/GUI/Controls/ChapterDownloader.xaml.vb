@@ -54,7 +54,7 @@ Public Class ChapterDownloader
             chapterImages(i) = img(1)
         Next
 
-        _downloader = New ChapterImagesDownloader(chapterImages)
+        _downloader = New ChapterImagesDownloader(chapterImages, _mangaTitle, _chapterInfo.Number, _chapterInfo.Title)
         _downloader.BeginDownload()
 
         Return True

@@ -10,6 +10,10 @@ Public Class ChapterImagesDownloader
     Private _chapterImages As String() = Nothing
     Private _settings As AppManager = Nothing
     Private _currentStatus As Status
+    Private _mangaTitle As String
+    Private _chapterTitle As String
+    Private _chapterNumber As Integer
+    Private _destinationFolder As String = ""
 
     Private _imgBase As String = "http://cdn.mangaeden.com/mangasimg/{0}"
 #End Region
@@ -32,8 +36,11 @@ Public Class ChapterImagesDownloader
 #End Region
 
 #Region "Constructor / Distructor"
-    Public Sub New(ByVal chapterImages As String())
+    Public Sub New(ByVal chapterImages As String(), ByVal mangaTitle As String, ByVal chapterNumber As Integer, ByVal chapterTitle As String)
         _chapterImages = chapterImages
+        _mangaTitle = mangaTitle
+        _chapterNumber = chapterNumber
+        _chapterTitle = chapterTitle
 
         _settings = New AppManager()
         _settings.LoadSettings()
@@ -61,28 +68,63 @@ Public Class ChapterImagesDownloader
         Return True
     End Function
 
+    Private Function prepareFolder() As Boolean
+        Dim result As Boolean = False
+
+        If Not Directory.Exists(_settings.DownloadFolder) Then
+            Throw New Exception("Specified download folder doesn't exists.")
+
+        Else
+            'Checking and creating folder for the manga
+            _destinationFolder = String.Format("{0}\{1}", _settings.DownloadFolder, _mangaTitle)
+            If Not Directory.Exists(_destinationFolder) Then
+                Directory.CreateDirectory(_destinationFolder)
+            End If
+
+            If _settings.DownloadMode = AppManager.eDownloadMode.Folder Then
+                'As I need to download to a folder I check if it exists or not and eventually I create it
+                _destinationFolder = String.Format("{0}\{1}", _destinationFolder, _chapterNumber)
+                If Not Directory.Exists(_destinationFolder) Then
+                    Directory.CreateDirectory(_destinationFolder)
+                End If
+            End If
+
+
+            result = True
+
+        End If
+
+        Return result
+    End Function
+
     Private Function downloadChapters() As Boolean
 
-        For Each page As String In _chapterImages
-            _currentStatus.currentDownload += 1
-            _currentStatus.currentFileName = page
+        If Not _chapterImages Is Nothing Then
+            'Checking and eventually creating manga and chapter (if folder download and not zip) of the manga
+            If prepareFolder Then
 
-            Dim sourceFile As String = String.Format(_imgBase, page)
-            Dim destinationFile As String = String.Format("{0}\{1}", _settings.DownloadFolder, extractFileName(page))
+                For Each page As String In _chapterImages
+                    _currentStatus.currentDownload += 1
+                    _currentStatus.currentFileName = page
 
-            RaiseEvent PageDownloadStart(Me)
-            RaiseEvent CurrentDownload(Me, _currentStatus)
-            Try
-                If Not File.Exists(destinationFile) Then
-                    _webClient.DownloadFile(New Uri(sourceFile), destinationFile)
-                End If
+                    Dim sourceFile As String = String.Format(_imgBase, page)
+                    Dim destinationFile As String = String.Format("{0}\{1}", _destinationFolder, _currentStatus.currentDownload & ".jpg") 'extractFileName(page))
 
-            Catch ex As Exception
-                Debug.Print(ex.Message)
-            End Try
+                    RaiseEvent PageDownloadStart(Me)
+                    RaiseEvent CurrentDownload(Me, _currentStatus)
+                    Try
+                        If Not File.Exists(destinationFile) Then
+                            _webClient.DownloadFile(New Uri(sourceFile), destinationFile)
+                        End If
 
-        Next
+                    Catch ex As Exception
+                        Debug.Print(ex.Message)
+                    End Try
 
+                Next
+
+            End If
+        End If
         Return True
     End Function
 
