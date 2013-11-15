@@ -3,6 +3,7 @@
 Imports System.Net
 Imports SettingsManager
 Imports System.IO
+Imports System.Threading
 
 Public Class ChapterImagesDownloader
 #Region "Declarations"
@@ -35,6 +36,10 @@ Public Class ChapterImagesDownloader
     Public Event PageDownloadEnd(sender As Object, e As System.Net.DownloadDataCompletedEventArgs)
 #End Region
 
+#Region "Thread and Delegates"
+    Private _run As Thread
+#End Region
+
 #Region "Constructor / Distructor"
     Public Sub New(ByVal chapterImages As String(), ByVal mangaTitle As String, ByVal chapterNumber As Integer, ByVal chapterTitle As String)
         _chapterImages = chapterImages
@@ -50,6 +55,8 @@ Public Class ChapterImagesDownloader
         _currentStatus.currentDownload = 0
         _currentStatus.currentFileName = ""
         _currentStatus.totalDownloads = _chapterImages.GetLength(0)
+
+        _run = New Thread(AddressOf ExecuteDownload)
 
     End Sub
 
@@ -154,10 +161,16 @@ Public Class ChapterImagesDownloader
         Return result(result.GetUpperBound(0))
     End Function
 
-    Public Sub BeginDownload()
+    Private Sub ExecuteDownload()
         startDownload()
         downloadChapters()
         endDownload()
+
+    End Sub
+
+    Public Sub BeginDownload()
+        _run.SetApartmentState(ApartmentState.MTA)
+        _run.Start()
     End Sub
 #End Region
 End Class

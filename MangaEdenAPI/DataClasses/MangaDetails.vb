@@ -39,7 +39,9 @@ Public Class MangaDetails
     Public Function ChapterDate(ByVal ChapterIndex As Integer, ByVal sFormat As String) As String
         Dim result As String = ""
 
-        result = UnixTimeStamp_To_Date(DirectCast(chapters(ChapterIndex)(1), Double), sFormat)
+        If chapters.Count > 0 Then
+            result = UnixTimeStamp_To_Date(DirectCast(chapters(ChapterIndex)(1), Double), sFormat)
+        End If
 
         Return result
     End Function
@@ -47,7 +49,9 @@ Public Class MangaDetails
     Public Function ChapterNumber(ByVal ChapterIndex As Integer) As Integer
         Dim result As Integer = 0
 
-        result = chapters(ChapterIndex)(0)
+        If chapters.Count > 0 Then
+            result = chapters(ChapterIndex)(0)
+        End If
 
         Return result
     End Function
@@ -55,7 +59,9 @@ Public Class MangaDetails
     Public Function ChapterTitle(ByVal ChapterIndex As Integer) As String
         Dim result As String = ""
 
-        result = chapters(ChapterIndex)(2)
+        If chapters.Count > 0 Then
+            result = chapters(ChapterIndex)(2)
+        End If
 
         Return result
     End Function
@@ -63,7 +69,9 @@ Public Class MangaDetails
     Public Function ChapterID(ByVal ChapterIndex As Integer) As String
         Dim result As String = ""
 
-        result = chapters(ChapterIndex)(3)
+        If chapters.Count > 0 Then
+            result = chapters(ChapterIndex)(3)
+        End If
 
         Return result
     End Function

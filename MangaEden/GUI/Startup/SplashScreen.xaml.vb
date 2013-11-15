@@ -17,10 +17,12 @@ Public Class SplashScreen
     Private Sub SplashScreen_ContentRendered(sender As Object, e As System.EventArgs) Handles Me.ContentRendered
         frmMain = New MainWindow
         frmMain.Show()
+        frmMain.IsEnabled = False
 
     End Sub
 
     Private Sub frmMain_LoadingCompleted() Handles frmMain.LoadingCompleted
+        frmMain.IsEnabled = True
         Me.Close()
     End Sub
 

@@ -10,6 +10,7 @@ Public Class DownloadPage
     Private _chapters As MangaChaptersDetails()
     Private _chapter As MangaChaptersDetails
     Private _mangaName As String
+    Private _flagRunned As Boolean = False
 #End Region
 
 #Region "Thread and delegates"
@@ -22,25 +23,32 @@ Public Class DownloadPage
     Private Delegate Function StartDownload()
     Private _startDownload As StartDownload
 
+    Private Delegate Function PrepareSingleDownload()
+    Private _singleDownload As PrepareSingleDownload
 
 #End Region
 
-    Private Sub DownloadPage_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+    Private Sub DownloadPage_ContentRendered(sender As Object, e As EventArgs) Handles Me.ContentRendered
+        _flagRunned = True
 
         If Not _chapter Is Nothing Then
             ReDim _threads(0)
-            _threads(0) = New Thread(AddressOf SingleDownload)
-            _threads(0).SetApartmentState(ApartmentState.STA)
+            _threads(0) = New Thread(AddressOf InitiateSingleDownload)
             _threads(0).Start()
         End If
 
     End Sub
 
 #Region "Routines"
-    Private Sub SingleDownload()
-        Dispatcher.Invoke(_showDownload, gridContainer, 1, _chapter, _mangaName)
-        Dispatcher.Invoke(_startDownload)
+    Private Sub InitiateSingleDownload()
+        Dispatcher.Invoke(_singleDownload)
     End Sub
+
+    Private Function SingleDownload()
+        Dispatcher.Invoke(_showDownload, gridContainer, 1, _chapter, _mangaName)
+
+        Return True
+    End Function
 
     Private Function SingleDownloadStart()
         downloads(0).startDownload()
@@ -79,6 +87,7 @@ Public Class DownloadPage
     Private Sub initDelegates()
         _showDownload = New ShowDownload(AddressOf NewDownload)
         _startDownload = New StartDownload(AddressOf SingleDownloadStart)
+        _singleDownload = New PrepareSingleDownload(AddressOf SingleDownload)
     End Sub
 
     Public Sub New()

@@ -32,7 +32,7 @@
         <Label Content="Downloads" FontSize="26" FontStyle="Normal" FontWeight="Bold" Foreground="#FF41B1E1" Height="49" HorizontalAlignment="Left" Margin="4,215,-2,0" Name="Label3" VerticalAlignment="Top" Width="604" />
         <Border Background="#FF41B1E1" BorderBrush="{x:Null}" BorderThickness="0" Height="3" HorizontalAlignment="Left" Margin="10,257,0,0" Name="Border2" VerticalAlignment="Top" Width="583" />
         <Label Content="Download folder:" FontWeight="Bold" Height="26" HorizontalAlignment="Left" Margin="48,270,0,0" Name="Label4" VerticalAlignment="Top" Width="110" />
-        <Button Height="25" HorizontalAlignment="Left" Margin="434,271,0,0" Name="btFolder" VerticalAlignment="Top" Width="25" ToolTip="Select folder">
+        <Button Height="25" HorizontalAlignment="Left" Margin="434,271,0,0" Name="btFolder" VerticalAlignment="Top" Width="25" ToolTip="Select folder" Padding="0">
             <ContentControl>
                 <Image Height="16" Name="imgFolder" Stretch="Fill" Width="16" Source="/MangaEden;component/Images/folder.png" Margin="0,-1,0,0" />
             </ContentControl>
