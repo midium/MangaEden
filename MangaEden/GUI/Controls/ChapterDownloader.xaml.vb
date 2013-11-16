@@ -195,4 +195,13 @@ Public Class ChapterDownloader
         End If
 
     End Sub
+
+    Private Sub btView_Click(sender As Object, e As RoutedEventArgs) Handles btView.Click
+        Dim frmPlay As ChapterViewer = Nothing
+
+        frmPlay = New ChapterViewer(_downloader.DownloadedPathOrFile, _mangaTitle, _chapterInfo.Title, _chapterInfo.Number, True)
+
+        frmPlay.ShowDialog()
+        frmPlay = Nothing
+    End Sub
 End Class
