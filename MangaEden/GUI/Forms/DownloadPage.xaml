@@ -15,6 +15,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid x:Name="gridContainer"></Grid>
+       <ScrollViewer >
+        <Grid x:Name="gridContainer">
+        </Grid>
+    </ScrollViewer>
 </Controls:MetroWindow>
 

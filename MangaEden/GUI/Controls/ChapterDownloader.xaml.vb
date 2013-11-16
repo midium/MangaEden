@@ -3,6 +3,7 @@
 Imports MangaEdenAPI
 Imports WebElements
 Imports System.Threading
+Imports System.IO
 
 Public Class ChapterDownloader
     Private _mangaTitle As String = ""
@@ -12,6 +13,8 @@ Public Class ChapterDownloader
     Private _chapterImages As ChapterImages = Nothing
 
     Private WithEvents _downloader As ChapterImagesDownloader
+
+    Public Event DownloadDeletedFromDisk(sender As Object)
 
 #Region "Thread and Delegates"
     Private _run As Thread
@@ -29,8 +32,12 @@ Public Class ChapterDownloader
     Private Delegate Sub RunDownload()
     Private _runDownload As RunDownload
 
+    Private Delegate Sub EnableButtons(ByVal enabled As Boolean)
+    Private _enableButtons As EnableButtons
+
 #End Region
 
+#Region "Properties"
     Public WriteOnly Property MangaTitle As String
         Set(value As String)
             _mangaTitle = value
@@ -50,6 +57,13 @@ Public Class ChapterDownloader
             lblStatus.Content = String.Format("Status: {0}", value)
         End Set
     End Property
+#End Region
+
+#Region "Routines"
+    Private Function isFolder(ByVal path As String) As Boolean
+        Dim fl As FileAttribute = File.GetAttributes(path)
+        Return ((fl And FileAttribute.Directory) = FileAttribute.Directory)
+    End Function
 
     Private Sub UpdateTitle()
         If Not _chapterInfo Is Nothing Then
@@ -84,7 +98,9 @@ Public Class ChapterDownloader
         Return True
 
     End Function
+#End Region
 
+#Region "Events management"
     Private Sub _downloader_CurrentDownload(sender As Object, DownloadStatus As WebElements.ChapterImagesDownloader.Status) Handles _downloader.CurrentDownload
         Dispatcher.Invoke(_updateStatus, String.Format("Status: {0}", String.Format("Page {0} or {1}", DownloadStatus.currentDownload, DownloadStatus.totalDownloads)))
         Dispatcher.Invoke(_updateProgress, DownloadStatus.currentDownload, DownloadStatus.totalDownloads)
@@ -98,7 +114,9 @@ Public Class ChapterDownloader
     Private Sub _downloader_DownloadEnd(sender As Object, DownloadStatus As WebElements.ChapterImagesDownloader.Status) Handles _downloader.DownloadEnd
         Dispatcher.Invoke(_updateStatus, "Status: Download Completed")
         Dispatcher.Invoke(_updateProgress, DownloadStatus.totalDownloads, DownloadStatus.totalDownloads)
+        Dispatcher.Invoke(_enableButtons, True)
     End Sub
+#End Region
 
     Public Sub New()
 
@@ -111,13 +129,16 @@ Public Class ChapterDownloader
         _run = New Thread(AddressOf Timer)
         _updateStatus = New UpdateStatus(AddressOf UpdateStatusDelegate)
         _updateProgress = New UpdateProgress(AddressOf UpdateProgressDelegate)
+        _enableButtons = New EnableButtons(AddressOf EnableButtonsDelegate)
     End Sub
 
     Private Sub ChapterDownloader_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         _run.Start()
     End Sub
 
+#Region "Thread and Delegated functions"
     Private Sub Timer()
+        'TODO: Find better solution
         Do
             _timerCount += 1
 
@@ -139,4 +160,39 @@ Public Class ChapterDownloader
         pgbStatus.Value = current
     End Sub
 
+    Private Sub EnableButtonsDelegate(ByVal enabled As Boolean)
+        btDelete.IsEnabled = enabled
+        btView.IsEnabled = enabled
+
+    End Sub
+#End Region
+
+    Private Sub btDelete_Click(sender As Object, e As RoutedEventArgs) Handles btDelete.Click
+
+        If MsgBox("You are about to delete the downloaded chapter. This action can't be undone." & vbCrLf & "Are you sure you want to remove it?", MsgBoxStyle.YesNo + MsgBoxStyle.Critical) = MsgBoxResult.Yes Then
+            Dim fileOrFolder As String = _downloader.DownloadedPathOrFile
+
+            Try
+
+                If isFolder(fileOrFolder) Then
+                    'It has been download to folder
+                    Directory.Delete(fileOrFolder, True)
+                Else
+                    'It has been download as zip file
+                    File.Delete(fileOrFolder)
+                End If
+
+                MsgBox(String.Format("Chapter {0} of manga {1} correctly deleted.", _chapterInfo.Number, _mangaTitle), MsgBoxStyle.Information)
+
+                RaiseEvent DownloadDeletedFromDisk(Me)
+                Me.Visibility = Windows.Visibility.Collapsed
+
+            Catch ex As Exception
+                MsgBox("There have been problems removing the selected chapter." & vbCrLf & "Please check that the chapter isn't open by other programs")
+
+            End Try
+
+        End If
+
+    End Sub
 End Class

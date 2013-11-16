@@ -39,6 +39,22 @@ Public Class ChapterImagesDownloader
     Public Event PageDownloadEnd(sender As Object, e As System.Net.DownloadDataCompletedEventArgs)
 #End Region
 
+#Region "Properties"
+    Public ReadOnly Property DownloadedPathOrFile As String
+        Get
+            If Not _settings Is Nothing Then
+                If _settings.DownloadMode = AppManager.eDownloadMode.Folder Then
+                    Return _destinationFolder
+                Else
+                    Return _zipDestinationFolder
+                End If
+            Else
+                Return ""
+            End If
+        End Get
+    End Property
+#End Region
+
 #Region "Thread and Delegates"
     Private _run As Thread
 #End Region
@@ -156,7 +172,7 @@ Public Class ChapterImagesDownloader
                     _currentStatus.currentFileName = "Compressing downloaded images"
                     RaiseEvent CurrentDownload(Me, _currentStatus)
 
-                    CreateChapterZIP()
+                    _zipDestinationFolder = CreateChapterZIP()
 
                     'Updating status information holder
                     _currentStatus.currentFileName = "Compression completed"
