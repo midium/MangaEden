@@ -4,6 +4,8 @@ Imports System.Net
 Imports SettingsManager
 Imports System.IO
 Imports System.Threading
+Imports ICSharpCode.SharpZipLib.Core
+Imports ICSharpCode.SharpZipLib.Zip
 
 Public Class ChapterImagesDownloader
 #Region "Declarations"
@@ -15,6 +17,7 @@ Public Class ChapterImagesDownloader
     Private _chapterTitle As String
     Private _chapterNumber As Integer
     Private _destinationFolder As String = ""
+    Private _zipDestinationFolder As String = ""
 
     Private _imgBase As String = "http://cdn.mangaeden.com/mangasimg/{0}"
 #End Region
@@ -80,6 +83,7 @@ Public Class ChapterImagesDownloader
 
         If Not Directory.Exists(_settings.DownloadFolder) Then
             Throw New Exception("Specified download folder doesn't exists.")
+            Return False
 
         Else
             'Checking and creating folder for the manga
@@ -94,6 +98,15 @@ Public Class ChapterImagesDownloader
                 If Not Directory.Exists(_destinationFolder) Then
                     Directory.CreateDirectory(_destinationFolder)
                 End If
+
+            Else
+                'Zip file, I save the images on temporary folder then I compress them into the zip file to be stored on real destination folder
+                _zipDestinationFolder = _destinationFolder
+                _destinationFolder = String.Format("{0}\{1}", My.Computer.FileSystem.SpecialDirectories.Temp, _mangaTitle & _chapterNumber)
+                If Not Directory.Exists(_destinationFolder) Then
+                    Directory.CreateDirectory(_destinationFolder)
+                End If
+
             End If
 
 
@@ -105,34 +118,107 @@ Public Class ChapterImagesDownloader
     End Function
 
     Private Function downloadChapters() As Boolean
-
         If Not _chapterImages Is Nothing Then
             'Checking and eventually creating manga and chapter (if folder download and not zip) of the manga
-            If prepareFolder Then
+            If prepareFolder() Then
 
+                'Looping trough chapters images to download them
                 For Each page As String In _chapterImages
+                    'Updating status information holder
                     _currentStatus.currentDownload += 1
                     _currentStatus.currentFileName = page
 
+                    'Preparing source and destination folders
                     Dim sourceFile As String = String.Format(_imgBase, page)
-                    Dim destinationFile As String = String.Format("{0}\{1}", _destinationFolder, _currentStatus.currentDownload & ".jpg") 'extractFileName(page))
+                    Dim extension As String = extractFileExtension(page)
+                    Dim destinationFile As String = String.Format("{0}\{1}", _destinationFolder, _currentStatus.currentDownload.ToString("000") & "." & extension)
 
+                    'Raising events
                     RaiseEvent PageDownloadStart(Me)
                     RaiseEvent CurrentDownload(Me, _currentStatus)
+
+                    'Downloading file
                     Try
                         If Not File.Exists(destinationFile) Then
                             _webClient.DownloadFile(New Uri(sourceFile), destinationFile)
                         End If
 
                     Catch ex As Exception
+                        'TODO: Implement eventual error management
                         Debug.Print(ex.Message)
                     End Try
 
                 Next
 
+                'Now if it is required a zip I create it
+                If _settings.DownloadMode = AppManager.eDownloadMode.Zip Then
+                    'Updating status information holder
+                    _currentStatus.currentFileName = "Compressing downloaded images"
+                    RaiseEvent CurrentDownload(Me, _currentStatus)
+
+                    CreateChapterZIP()
+
+                    'Updating status information holder
+                    _currentStatus.currentFileName = "Compression completed"
+                    RaiseEvent CurrentDownload(Me, _currentStatus)
+                End If
+
             End If
         End If
         Return True
+    End Function
+
+    Private Function CreateChapterZIP()
+        Dim destinationFile As String = String.Format("{0}\{1}", _zipDestinationFolder, String.Format("{0}_-_{1}_-_{2}.zip", _mangaTitle, _chapterNumber, _chapterTitle.Replace(" ", "_")))
+        Dim fileStream As New FileStream(destinationFile, FileMode.Create)
+        Dim zipper As New ZipOutputStream(fileStream)
+
+        ' This setting will strip the leading part of the folder path in the entries, to
+        ' make the entries relative to the starting folder.
+        ' To include the full path for each entry up to the drive root, assign folderOffset = 0.
+        Dim folderOffset As Integer = _destinationFolder.Length + (If(_destinationFolder.EndsWith("\"), 0, 1))
+
+        'Configuring compressor
+        zipper.SetLevel(9) 'Max compression level. Valid values 0..9
+        zipper.IsStreamOwner = True 'This will take control also of the fileStream object closing it within zipper close
+
+        'Looping trough all the files downloaded
+        For Each fl As String In Directory.GetFiles(_destinationFolder)
+            If File.Exists(fl) Then
+                Dim fi As New FileInfo(fl)
+
+                Dim entryName As String = fl.Substring(folderOffset)  ' Makes the name in zip based on the folder
+                entryName = ZipEntry.CleanName(entryName)       ' Removes drive from name and fixes slash direction
+                Dim newEntry As New ZipEntry(entryName)
+                newEntry.DateTime = fi.LastWriteTime            ' Note the zip format stores 2 second granularity
+
+                ' To permit the zip to be unpacked by built-in extractor in WinXP and Server2003, WinZip 8, Java, and other older code,
+                ' you need to do one of the following: Specify UseZip64.Off, or set the Size.
+                ' If the file may be bigger than 4GB, or you do not need WinXP built-in compatibility, you do not need either,
+                ' but the zip will be in Zip64 format which not all utilities can understand.
+                '   zipStream.UseZip64 = UseZip64.Off
+                newEntry.Size = fi.Length
+
+                zipper.PutNextEntry(newEntry)
+
+                ' Zip the file in buffered chunks
+                ' the "using" will close the stream even if an exception occurs
+                Dim buffer As Byte() = New Byte(4095) {}
+                Using streamReader As FileStream = File.OpenRead(fl)
+                    StreamUtils.Copy(streamReader, zipper, buffer)
+                End Using
+                zipper.CloseEntry()
+            End If
+        Next
+
+        zipper.Close()
+        fileStream.Dispose()
+
+        'Now that the zip is created I remove the temporary downloaded files
+        Directory.Delete(_destinationFolder, True)
+
+        Return destinationFile
+
     End Function
 
     Private Function endDownload() As Boolean
@@ -158,6 +244,11 @@ Public Class ChapterImagesDownloader
 #Region "Routines"
     Private Function extractFileName(ByVal ImagePath As String) As String
         Dim result As String() = ImagePath.Split("/")
+        Return result(result.GetUpperBound(0))
+    End Function
+
+    Private Function extractFileExtension(ByVal ImageFile As String) As String
+        Dim result As String() = ImageFile.Split(".")
         Return result(result.GetUpperBound(0))
     End Function
 

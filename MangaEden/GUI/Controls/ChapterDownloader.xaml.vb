@@ -75,7 +75,11 @@ Public Class ChapterDownloader
 
         _downloader = New ChapterImagesDownloader(chapterImages, _mangaTitle, _chapterInfo.Number, _chapterInfo.Title)
         _runDownload = New RunDownload(AddressOf _downloader.BeginDownload)
-        Dispatcher.Invoke(_runDownload)
+        Try
+            Dispatcher.Invoke(_runDownload)
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical)
+        End Try
 
         Return True
 
