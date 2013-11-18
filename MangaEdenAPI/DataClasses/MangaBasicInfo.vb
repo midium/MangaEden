@@ -1,5 +1,7 @@
 ﻿Option Explicit On
 
+Imports SettingsManager
+
 Public Class MangaBasicInfo
     Public a As String 'alias
     Public ld As Double 'last chapter date
@@ -8,6 +10,9 @@ Public Class MangaBasicInfo
     Public s As Integer 'status
     Public im As String 'image
     Public t As String 'title
+
+    Private _settings As AppManager
+
     Enum MangaStatus
         NotFinished = 2
         Finished = 1
@@ -59,15 +64,21 @@ Public Class MangaBasicInfo
         Return t
     End Function
 
-    Public ReadOnly Property IsNew(ByVal daysOld As Integer) As Boolean
+    Public ReadOnly Property IsNew As Boolean
         Get
-            If Format(Today.AddDays(Val("-" & daysOld)), "dd-MM-yyyy") <= LastChapterDate Then
+            Dim newDateLimit As Integer = 0 - _settings.NewChapterDays
+            If (UnixTimeStamp_To_Date(ld) >= Now().Date.AddDays(newDateLimit)) Then
+                'It is within the day limits
                 Return True
             Else
+                'It is not within the day limits
                 Return False
             End If
         End Get
     End Property
 
-
+    Public Sub New()
+        _settings = New AppManager
+        _settings.LoadSettings()
+    End Sub
 End Class

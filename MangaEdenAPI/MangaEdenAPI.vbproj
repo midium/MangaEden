@@ -121,6 +121,10 @@
       <Project>{680E7DEF-20D8-4BFB-B4B8-9FCBE814EFC5}</Project>
       <Name>WebElements</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SettingsManager\SettingsManager.vbproj">
+      <Project>{a259566a-582c-42f5-8d54-5993eb7ff772}</Project>
+      <Name>SettingsManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\new.png" />

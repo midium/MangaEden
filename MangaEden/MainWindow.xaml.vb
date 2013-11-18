@@ -158,13 +158,15 @@ Class MainWindow
             Dim mangaTitle As String = i.Title
 
             'Using LinQ to get the manga with that title from the availables one
-            Dim result = From value In available.manga
-                         Where value.Title = mangaTitle
+            If Not available Is Nothing Then
+                Dim result = From value In available.manga
+                             Where value.Title = mangaTitle
 
-            'I need to loop to get the control to the element (became MangaBasicInfo object)
-            For Each el In result
-                i.ID = el.ID
-            Next
+                'I need to loop to get the control to the element (became MangaBasicInfo object)
+                For Each el In result
+                    i.ID = el.ID
+                Next
+            End If
 
         Next
 

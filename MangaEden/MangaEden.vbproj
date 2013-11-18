@@ -132,6 +132,7 @@
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\BoolToVisibilityConverter.vb" />
     <Compile Include="Classes\SearchParams.vb" />
     <Compile Include="GUI\Controls\ChapterDownloader.xaml.vb">
       <DependentUpon>ChapterDownloader.xaml</DependentUpon>
@@ -317,6 +318,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\new.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
