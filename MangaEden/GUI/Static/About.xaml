@@ -28,7 +28,7 @@
                         <ColumnDefinition Width="26*" />
                         <ColumnDefinition Width="169*" />
                     </Grid.ColumnDefinitions>
-                    <Image Height="26" Name="Image2" Stretch="Fill" Width="26" Source="/MangaEden;component/Images/user.png" />
+                    <Image Height="16" Name="Image2" Stretch="Fill" Width="16" Source="/MangaEden;component/Images/user.png" />
                     <Label Content="Matteo Loro" Height="26" Name="Label3" Grid.Column="1" Margin="0,0,6,0" HorizontalAlignment="Right" Width="157" />
                 </Grid>
             </StackPanel>
@@ -38,7 +38,7 @@
                         <ColumnDefinition Width="26*" />
                         <ColumnDefinition Width="169*" />
                     </Grid.ColumnDefinitions>
-                    <Image Height="26" Name="Image3" Source="/MangaEden;component/Images/mail.png" Stretch="Fill" Width="26" />
+                    <Image Height="16" Name="Image3" Source="/MangaEden;component/Images/mail.png" Stretch="Fill" Width="16" />
                     <Label Content="matteo.loro@gmail.com" Grid.Column="1" Height="26" HorizontalAlignment="Right" Margin="0,0,6,0" Name="Label2" Width="157" />
                 </Grid>
             </StackPanel>
@@ -48,7 +48,7 @@
                         <ColumnDefinition Width="26*" />
                         <ColumnDefinition Width="210*" />
                     </Grid.ColumnDefinitions>
-                    <Image Height="26" Name="Image4" Source="/MangaEden;component/Images/facebook.png" Stretch="Fill" Width="26" />
+                    <Image Height="16" Name="Image4" Source="/MangaEden;component/Images/facebook.png" Stretch="Fill" Width="16" />
                     <Label Content="https://www.facebook.com/midium81" Grid.Column="1" Height="26" HorizontalAlignment="Right" Margin="0,0,6,0" Name="Label4" Width="214" />
                 </Grid>
             </StackPanel>
@@ -58,7 +58,7 @@
                         <ColumnDefinition Width="25*" />
                         <ColumnDefinition Width="260*" />
                     </Grid.ColumnDefinitions>
-                    <Image Height="26" Name="Image5" Source="/MangaEden;component/Images/linkedin.png" Stretch="Fill" Width="26" Margin="-1,0,0,0" />
+                    <Image Height="16" Name="Image5" Source="/MangaEden;component/Images/linkedin.png" Stretch="Fill" Width="16" Margin="5,5,9,5" />
                     <Label Content="http://www.linkedin.com/pub/matteo-loro/2a/285/3a3" Grid.Column="1" Height="26" HorizontalAlignment="Right" Margin="0,0,6,0" Name="Label5" Width="301" />
                 </Grid>
             </StackPanel>
@@ -68,7 +68,7 @@
                         <ColumnDefinition Width="25*" />
                         <ColumnDefinition Width="260*" />
                     </Grid.ColumnDefinitions>
-                    <Image Height="26" Margin="-1,0,0,0" Name="Image6" Source="/MangaEden;component/Images/github.png" Stretch="Fill" Width="26" />
+                    <Image Height="16" Margin="-1,0,0,0" Name="Image6" Source="/MangaEden;component/Images/github.png" Stretch="Fill" Width="16" />
                     <Label Content=" midium / MangaEden" Grid.Column="1" Height="26" HorizontalAlignment="Right" Margin="0,0,6,0" Name="Label6" Width="301" />
                 </Grid>
             </StackPanel>
