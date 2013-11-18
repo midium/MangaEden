@@ -5,6 +5,7 @@ Imports System.Threading
 Imports System.IO
 Imports ICSharpCode.SharpZipLib.Core
 Imports ICSharpCode.SharpZipLib.Zip
+Imports SettingsManager
 
 Public Class ChapterViewer
 
@@ -23,6 +24,8 @@ Public Class ChapterViewer
     Private _fileOrFolder As String = ""
     Private _flgFromDisk As Boolean = False
 
+    Private _settings As AppManager
+
     Public Sub New(ByVal Chapter As String, ByVal MangaName As String, ByVal ChapterTitle As String, ByVal ChapterNumber As Integer, Optional ByVal FromDisk As Boolean = False)
 
         ' This call is required by the designer.
@@ -39,6 +42,9 @@ Public Class ChapterViewer
         If Not FromDisk Then
             _meAPI = New API
         End If
+
+        _settings = New AppManager
+        _settings.LoadSettings()
 
     End Sub
 
@@ -61,8 +67,13 @@ Public Class ChapterViewer
     End Function
 
     Private Sub ChapterViewer_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
-        lblTitle.Content = String.Format("{0} - {1}: {2}", _mangaName, _chapterNumber, _chapterTitle)
+        'I first check if this chapter is available on local disk in one of the allowed formats
+        checkOnDisk()
 
+        'Updating title
+        lblTitle.Content = String.Format("{0} - {1}: {2} [{3}]", _mangaName, _chapterNumber, _chapterTitle, IIf(_flgFromDisk, "Local", "Online"))
+
+        'If available on disk or required to show the local one
         If _flgFromDisk Then
             If isFolder(_mangaChapter) Then
                 'Folder
@@ -122,6 +133,9 @@ Public Class ChapterViewer
             End If
 
         Else
+            'Online reading.
+
+            'Not on local disk, showing from online source
             _chapterImages = _meAPI.getChapterImages(_mangaChapter)
             _chapterImages.Sort()
 
@@ -130,6 +144,33 @@ Public Class ChapterViewer
         LoadChapterImage(_imageIndex)
 
     End Sub
+
+    Private Function checkOnDisk() As Boolean
+        Dim chapterFolder As String = String.Format("{0}\{1}", _settings.DownloadFolder, _mangaName)
+        Dim zipFileName As String = String.Format("{0}_-_{1}_-_{2}.zip", _mangaName, _chapterNumber, _chapterTitle.Replace(" ", "_"))
+
+        'Checking that the folder related to this manga exists, then I proceed, 
+        '   otherwise it means it is not available online in any format
+        If Directory.Exists(chapterFolder) Then
+            'Now I check if inside the manga folder there is a zip for this chapter, if not I proceed with next check,
+            '   otherwise I set the values as if I've tried to load from local source since the beginning
+            If File.Exists(String.Format("{0}\{1}", chapterFolder, zipFileName)) Then
+                _mangaChapter = String.Format("{0}\{1}", chapterFolder, zipFileName)
+                _flgFromDisk = True
+
+                Return True
+            End If
+
+            'Now I check if exists the chapter folder inside the manga one. If so I set the values as if required to show
+            '   the local source since the beginning
+            If Directory.Exists(String.Format("{0}\{1}", chapterFolder, _chapterNumber)) Then
+                _mangaChapter = String.Format("{0}\{1}", chapterFolder, _chapterNumber)
+                _flgFromDisk = True
+            End If
+        End If
+
+        Return False
+    End Function
 
     Private Function LoadChapterImage(ByVal imageIndex As Integer) As Boolean
         Dim localPath As String = ""
