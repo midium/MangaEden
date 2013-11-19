@@ -93,6 +93,7 @@ Class MainWindow
 
         'I update the application according to the following settings
         applyAppSettings()
+
     End Sub
 
     Private Sub MainWindow_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded

@@ -46,6 +46,8 @@ Public Class Settings
         If SetSettings() Then
             _settingsManager.SaveSettings()
 
+            MsgBox("Please note that some of the settings need the application to be restarted or waiting for next manga list update to be raised.", MsgBoxStyle.Information)
+
             Me.Close()
         Else
             MsgBox("Please set a valid download folder to proceed", MsgBoxStyle.Critical)
