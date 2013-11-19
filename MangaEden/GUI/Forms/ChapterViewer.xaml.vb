@@ -23,6 +23,7 @@ Public Class ChapterViewer
 
     Private _fileOrFolder As String = ""
     Private _flgFromDisk As Boolean = False
+    Private _flgImageLoading As Boolean = False 'This will let me know if I'm already opening an image (key or icon navigation) or if I've choose from the combobox
 
     Private _settings As AppManager
 
@@ -132,6 +133,8 @@ Public Class ChapterViewer
 
             End If
 
+            fillPageCombo(_localChapterImages.Length)
+
         Else
             'Online reading.
 
@@ -139,10 +142,18 @@ Public Class ChapterViewer
             _chapterImages = _meAPI.getChapterImages(_mangaChapter)
             _chapterImages.Sort()
 
+            fillPageCombo(_chapterImages.images.Count)
+
         End If
 
         LoadChapterImage(_imageIndex)
 
+    End Sub
+
+    Private Sub fillPageCombo(ByVal totalPages As Integer)
+        For i As Integer = 1 To totalPages
+            cboPage.Items.Add(i)
+        Next
     End Sub
 
     Private Function checkOnDisk() As Boolean
@@ -216,6 +227,10 @@ Public Class ChapterViewer
 
         End If
 
+        _flgImageLoading = True
+        cboPage.SelectedValue = _imageIndex + 1
+        _flgImageLoading = False
+
         Return Nothing
     End Function
 
@@ -244,5 +259,18 @@ Public Class ChapterViewer
 
     Private Sub imgNext_MouseDown(sender As Object, e As System.Windows.Input.MouseButtonEventArgs) Handles imgNext.MouseDown
         NextImage()
+    End Sub
+
+    Private Sub cboPage_SelectionChanged(sender As Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles cboPage.SelectionChanged
+        If Not _flgImageLoading Then
+            If Not cboPage.SelectedValue Is Nothing Then
+                Me.Cursor = Cursors.Wait
+
+                _imageIndex = Int(cboPage.SelectedValue) - 1
+                LoadChapterImage(_imageIndex)
+
+                Me.Cursor = Cursors.Arrow
+            End If
+        End If
     End Sub
 End Class

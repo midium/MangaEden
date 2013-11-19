@@ -14,7 +14,7 @@ Module Globals
         Return Format(dateTime, sFormat)
     End Function
 
-    Public Function UnixTimeStamp_To_Date(ByVal unixTS As Double) As DateTime
+    Public Function UnixTimeStamp_To_DateTime(ByVal unixTS As Double) As DateTime
         'First make a System.DateTime equivalent to the UNIX Epoch.
         Dim dateTime As System.DateTime = New System.DateTime(1970, 1, 1, 0, 0, 0, 0)
 

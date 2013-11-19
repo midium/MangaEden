@@ -17,7 +17,7 @@ Public Class MangaChaptersDetails
     Public ReadOnly Property IsNew As Boolean
         Get
             Dim newDateLimit As Integer = 0 - _settings.NewChapterDays
-            If (UnixTimeStamp_To_Date(chapter_date) >= Now().Date.AddDays(newDateLimit)) Then
+            If (UnixTimeStamp_To_DateTime(chapter_date) >= Now().Date.AddDays(newDateLimit)) Then
                 'It is within the day limits
                 Return True
             Else

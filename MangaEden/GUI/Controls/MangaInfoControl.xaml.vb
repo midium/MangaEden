@@ -79,20 +79,20 @@ Public Class MangaInfoControl
                         image = Nothing
                     End If
 
-                    imgCover.Source = Image
+                    imgCover.Source = image
 
-                    Image = Nothing
-
-                End If
+                    image = Nothing
 
                 End If
-
-            Else
-                imgCover.Source = Nothing
 
             End If
 
-            Return True
+        Else
+            imgCover.Source = Nothing
+
+        End If
+
+        Return True
     End Function
 
     Private Function showMangaInfo() As Boolean
