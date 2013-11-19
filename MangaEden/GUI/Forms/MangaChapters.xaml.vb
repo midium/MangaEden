@@ -104,4 +104,23 @@ Public Class MangaChapters
     End Function
 #End Region
 
+    Private Sub btDownload_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btDownload.Click
+        Dim chapterDetails As MangaChaptersDetails = lstChapters.SelectedItem
+
+        Dim downloader As DownloadPage = Nothing
+
+        If lstChapters.SelectedItems.Count > 0 Then
+            If lstChapters.SelectedItems.Count > 1 Then
+
+            Else
+                downloader = New DownloadPage(_mangaDetails.title, chapterDetails)
+
+            End If
+
+        End If
+
+        downloader.ShowDialog()
+        downloader = Nothing
+
+    End Sub
 End Class
