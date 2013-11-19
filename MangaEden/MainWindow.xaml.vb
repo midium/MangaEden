@@ -17,6 +17,7 @@ Class MainWindow
 
 #Region "Thread and delegates declaration"
     Private _loadThread As Thread
+    Private _timerThread As Thread
 
     Private Delegate Function LoadingFinished()
     Private _finish As LoadingFinished
@@ -33,43 +34,48 @@ Class MainWindow
 #End Region
 
     Public Function firstLoad() As Boolean
-        Dispatcher.Invoke(_loader, "Initializing Manga Eden APIs ...")
-        _api = New API
+        Do
 
-        Dispatcher.Invoke(_loader, "Loading application settings ...")
-        _settingsManager = New AppManager
-        _settingsManager.LoadSettings()
+            Dispatcher.Invoke(_loader, "Initializing Manga Eden APIs ...")
+            _api = New API
 
-        Dispatcher.Invoke(_loader, "Downloading updated manga list from MangaEden.com ...")
-        _availableMangas = _api.getMangaList(_settingsManager.Language)
+            Dispatcher.Invoke(_loader, "Loading application settings ...")
+            _settingsManager = New AppManager
+            _settingsManager.LoadSettings()
 
-        If _settingsManager.AutomaticLogin Then
-            Dispatcher.Invoke(_loader, "Performing user login ...")
-            Dim login_result As String = _api.Login(_settingsManager.Username, _settingsManager.Password)
+            Dispatcher.Invoke(_loader, "Downloading updated manga list from MangaEden.com ...")
+            _availableMangas = _api.getMangaList(_settingsManager.Language)
 
-            Dispatcher.Invoke(_loader, "Login result: " & login_result)
-            If login_result <> "OK" Then
-                'If the login fail I allow the user to see the result stopping the thread for a couple of seconds
-                Thread.Sleep(2000)
+            If _settingsManager.AutomaticLogin Then
+                Dispatcher.Invoke(_loader, "Performing user login ...")
+                Dim login_result As String = _api.Login(_settingsManager.Username, _settingsManager.Password)
 
-            Else
-                'Loading MyMangas just if login works
-                Dispatcher.Invoke(_loader, "Loading my Mangas ...")
-                _myMangas = _api.getMyMangas()
+                Dispatcher.Invoke(_loader, "Login result: " & login_result)
+                If login_result <> "OK" Then
+                    'If the login fail I allow the user to see the result stopping the thread for a couple of seconds
+                    Thread.Sleep(2000)
 
-                'Copying manga ID to myMangas
-                Dispatcher.Invoke(_loader, "Retrieving my Mangas IDs ...")
-                Dispatcher.Invoke(_myMangaIDs, _myMangas, _availableMangas)
+                Else
+                    'Loading MyMangas just if login works
+                    Dispatcher.Invoke(_loader, "Loading my Mangas ...")
+                    _myMangas = _api.getMyMangas()
+
+                    'Copying manga ID to myMangas
+                    Dispatcher.Invoke(_loader, "Retrieving my Mangas IDs ...")
+                    Dispatcher.Invoke(_myMangaIDs, _myMangas, _availableMangas)
+
+                End If
 
             End If
 
-        End If
+            Dispatcher.Invoke(_loader, "Applying app settings and showing mangas ...")
+            Dispatcher.Invoke(_applySettings)
 
-        Dispatcher.Invoke(_loader, "Applying app settings and showing mangas ...")
-        Dispatcher.Invoke(_applySettings)
+            Dispatcher.Invoke(_finish)
 
-        Dispatcher.Invoke(_finish)
-
+            'Waiting before next update
+            Thread.Sleep(3600000)
+        Loop While True
         Return True
     End Function
 
