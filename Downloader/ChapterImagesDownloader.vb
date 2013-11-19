@@ -6,6 +6,7 @@ Imports System.IO
 Imports System.Threading
 Imports ICSharpCode.SharpZipLib.Core
 Imports ICSharpCode.SharpZipLib.Zip
+Imports CommonRoutines
 
 Public Class ChapterImagesDownloader
 #Region "Declarations"
@@ -18,6 +19,8 @@ Public Class ChapterImagesDownloader
     Private _chapterNumber As Integer
     Private _destinationFolder As String = ""
     Private _zipDestinationFolder As String = ""
+
+    Private _ioRoutines As IORoutines
 
     Private _imgBase As String = "http://cdn.mangaeden.com/mangasimg/{0}"
 #End Region
@@ -76,6 +79,8 @@ Public Class ChapterImagesDownloader
         _currentStatus.totalDownloads = _chapterImages.GetLength(0)
 
         _run = New Thread(AddressOf ExecuteDownload)
+
+        _ioRoutines = New IORoutines
 
     End Sub
 
@@ -146,7 +151,7 @@ Public Class ChapterImagesDownloader
 
                     'Preparing source and destination folders
                     Dim sourceFile As String = String.Format(_imgBase, page)
-                    Dim extension As String = extractFileExtension(page)
+                    Dim extension As String = _ioRoutines.extractFileExtension(page)
                     Dim destinationFile As String = String.Format("{0}\{1}", _destinationFolder, _currentStatus.currentDownload.ToString("000") & "." & extension)
 
                     'Raising events
@@ -258,16 +263,6 @@ Public Class ChapterImagesDownloader
 #End Region
 
 #Region "Routines"
-    Private Function extractFileName(ByVal ImagePath As String) As String
-        Dim result As String() = ImagePath.Split("/")
-        Return result(result.GetUpperBound(0))
-    End Function
-
-    Private Function extractFileExtension(ByVal ImageFile As String) As String
-        Dim result As String() = ImageFile.Split(".")
-        Return result(result.GetUpperBound(0))
-    End Function
-
     Private Sub ExecuteDownload()
         startDownload()
         downloadChapters()

@@ -110,6 +110,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonRoutines\CommonRoutines.vbproj">
+      <Project>{F8334CE9-EED9-4474-BD3D-5FCAE1DDB6BC}</Project>
+      <Name>CommonRoutines</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SettingsManager\SettingsManager.vbproj">
       <Project>{A259566A-582C-42F5-8D54-5993EB7FF772}</Project>
       <Name>SettingsManager</Name>

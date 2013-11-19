@@ -255,6 +255,10 @@
     <Resource Include="Images\github.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonRoutines\CommonRoutines.vbproj">
+      <Project>{F8334CE9-EED9-4474-BD3D-5FCAE1DDB6BC}</Project>
+      <Name>CommonRoutines</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Downloader\WebElements.vbproj">
       <Project>{680E7DEF-20D8-4BFB-B4B8-9FCBE814EFC5}</Project>
       <Name>WebElements</Name>

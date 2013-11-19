@@ -50,7 +50,7 @@ Public Class MangaBasicInfo
 
     Public ReadOnly Property LastChapterDate As String
         Get
-            Return UnixTimeStamp_To_Date(ld, "dd-MM-yyyy")
+            Return _dateTimeRoutines.UnixTimeStamp_To_Date(ld, "dd-MM-yyyy")
         End Get
     End Property
 
@@ -67,7 +67,7 @@ Public Class MangaBasicInfo
     Public ReadOnly Property IsNew As Boolean
         Get
             Dim newDateLimit As Integer = 0 - _settings.NewChapterDays
-            If (UnixTimeStamp_To_DateTime(ld) >= Now().Date.AddDays(newDateLimit)) Then
+            If (_dateTimeRoutines.UnixTimeStamp_To_DateTime(ld) >= Now().Date.AddDays(newDateLimit)) Then
                 'It is within the day limits
                 Return True
             Else

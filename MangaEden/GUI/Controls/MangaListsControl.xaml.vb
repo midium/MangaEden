@@ -1,6 +1,7 @@
 ﻿Option Explicit On
 
 Imports MangaEdenAPI
+Imports CommonRoutines
 
 Public Class MangaListsControl
 
@@ -40,11 +41,11 @@ Public Class MangaListsControl
 
     Public Sub ShowHideMyMangas(ByVal bShow As Boolean)
         'Hiding my mangas
-        lstMyMangas.Visibility = BoolToVisibility(bShow)
-        lblMyManga.Visibility = BoolToVisibility(bShow)
-        rctMyManga.Visibility = BoolToVisibility(bShow)
-        lblLUMyMangas.Visibility = BoolToVisibility(bShow)
-        lblTitleMyMangas.Visibility = BoolToVisibility(bShow)
+        lstMyMangas.Visibility = _commonRoutines.BoolToVisibility(bShow)
+        lblMyManga.Visibility = _commonRoutines.BoolToVisibility(bShow)
+        rctMyManga.Visibility = _commonRoutines.BoolToVisibility(bShow)
+        lblLUMyMangas.Visibility = _commonRoutines.BoolToVisibility(bShow)
+        lblTitleMyMangas.Visibility = _commonRoutines.BoolToVisibility(bShow)
 
         If Not bShow Then
             'Increasing available manga space
@@ -76,6 +77,7 @@ Public Class MangaListsControl
         _lstAvailableMargin = lstMangas.Margin
         _lblLUMargin = lblLUMangas.Margin
         _lblTitleMargin = lblTitleMangas.Margin
+
     End Sub
 
     Private Sub lstMyMangas_GotFocus(sender As Object, e As System.Windows.RoutedEventArgs) Handles lstMyMangas.GotFocus

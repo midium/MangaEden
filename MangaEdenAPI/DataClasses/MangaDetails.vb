@@ -40,7 +40,7 @@ Public Class MangaDetails
         Dim result As String = ""
 
         If chapters.Count > 0 Then
-            result = UnixTimeStamp_To_Date(DirectCast(chapters(ChapterIndex)(1), Double), sFormat)
+            result = _dateTimeRoutines.UnixTimeStamp_To_Date(DirectCast(chapters(ChapterIndex)(1), Double), sFormat)
         End If
 
         Return result

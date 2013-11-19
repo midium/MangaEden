@@ -89,7 +89,7 @@ Public Class API
     Public Function getImage(ByVal ImagePath As String) As String Implements IApi.getImage
         Dim result As String = ""
         Dim remoteImagePath As String = String.Format(_imgBase, ImagePath)
-        Dim localImagePath As String = String.Format("{0}\{1}", System.IO.Path.GetTempPath, extractFileName(ImagePath))
+        Dim localImagePath As String = String.Format("{0}\{1}", System.IO.Path.GetTempPath, _ioRoutines.extractFileName(ImagePath))
 
         If File.Exists(localImagePath) Then
             'If the image has already been downloaded then I simply return the local path

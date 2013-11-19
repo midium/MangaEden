@@ -8,7 +8,7 @@ Public Class MyMangaLatestChapter
 
     Public ReadOnly Property LastChapterDate As String
         Get
-            Return UnixTimeStamp_To_Date([date], "dd-MM-yyyy")
+            Return _dateTimeRoutines.UnixTimeStamp_To_Date([date], "dd-MM-yyyy")
         End Get
     End Property
 End Class
