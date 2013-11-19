@@ -40,6 +40,7 @@ Public Class MangaChapters
         lblMangaTitle.Content = String.Format("{0} - {1} chapters available", _mangaDetails.title, _mangaDetails.chapters_len)
         
         _loadThread.Start()
+
     End Sub
 
     Private Sub btClose_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btClose.Click
@@ -105,22 +106,36 @@ Public Class MangaChapters
 #End Region
 
     Private Sub btDownload_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btDownload.Click
-        Dim chapterDetails As MangaChaptersDetails = lstChapters.SelectedItem
 
         Dim downloader As DownloadPage = Nothing
 
         If lstChapters.SelectedItems.Count > 0 Then
             If lstChapters.SelectedItems.Count > 1 Then
+                Dim chapters As MangaChaptersDetails() = Nothing
+                Dim iCount As Integer = -1
 
+                'Collecting the list of the selected chapters
+                For Each i As Object In lstChapters.SelectedItems
+                    iCount += 1
+                    ReDim Preserve chapters(iCount)
+
+                    chapters(iCount) = DirectCast(i, MangaChaptersDetails)
+                Next
+
+                downloader = New DownloadPage(_mangaDetails.title, chapters)
             Else
+                'Casting selected chapter as MangaChapterDetails object
+                Dim chapterDetails As MangaChaptersDetails = DirectCast(lstChapters.SelectedItem, MangaChaptersDetails)
+
                 downloader = New DownloadPage(_mangaDetails.title, chapterDetails)
 
             End If
 
         End If
 
-        downloader.ShowDialog()
-        downloader = Nothing
-
+        If Not downloader Is Nothing Then
+            downloader.ShowDialog()
+            downloader = Nothing
+        End If
     End Sub
 End Class

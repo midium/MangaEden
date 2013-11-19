@@ -6,7 +6,6 @@ Imports System.Threading
 Public Class DownloadPage
 
 #Region "Declarations"
-    Private downloads As List(Of ChapterDownloader)
     Private _chapters As MangaChaptersDetails()
     Private _chapter As MangaChaptersDetails
     Private _mangaName As String
@@ -20,11 +19,11 @@ Public Class DownloadPage
     Private Delegate Function ShowDownload(ByVal objectContainer As Object, ByVal i As Integer, ByVal chapterInfo As MangaChaptersDetails, ByVal mangaName As String)
     Private _showDownload As ShowDownload
 
-    Private Delegate Function StartDownload()
-    Private _startDownload As StartDownload
-
     Private Delegate Function PrepareSingleDownload()
     Private _singleDownload As PrepareSingleDownload
+
+    Private Delegate Function PrepareMultiDownload()
+    Private _multiDownload As PrepareMultiDownload
 
 #End Region
 
@@ -37,9 +36,15 @@ Public Class DownloadPage
             _threads(0).Start()
         End If
 
+        If Not _chapters Is Nothing Then
+            ReDim _threads(0)
+            _threads(0) = New Thread(AddressOf InitiateMultiDownload)
+            _threads(0).Start()
+        End If
     End Sub
 
 #Region "Routines"
+#Region "Single Download"
     Private Sub InitiateSingleDownload()
         Dispatcher.Invoke(_singleDownload)
     End Sub
@@ -50,18 +55,28 @@ Public Class DownloadPage
         Return True
     End Function
 
-    Private Function SingleDownloadStart()
-        downloads(0).startDownload()
+#End Region
+
+#Region "Multi-Download"
+    Private Sub InitiateMultiDownload()
+        Dispatcher.Invoke(_multiDownload)
+    End Sub
+
+    Private Function MultiDownload()
+        Dim iCnt As Integer = 1
+
+        For Each chapt As MangaChaptersDetails In _chapters
+            Dispatcher.Invoke(_showDownload, gridContainer, iCnt, chapt, _mangaName)
+
+            iCnt += 10
+        Next
 
         Return True
     End Function
 
-    Private Function NewDownload(ByVal objectContainer As Object, ByVal i As Integer, ByVal chapterInfo As MangaChaptersDetails, ByVal mangaName As String) As Boolean
-        'If the list containing all the downloads is not inited then I init it.
-        If downloads Is Nothing Then
-            downloads = New List(Of ChapterDownloader)
-        End If
+#End Region
 
+    Private Function NewDownload(ByVal objectContainer As Object, ByVal i As Integer, ByVal chapterInfo As MangaChaptersDetails, ByVal mangaName As String) As Boolean
         'Loading the new download module and showing it into the page
         Dim download As New ChapterDownloader
         objectContainer.Children.Add(download)
@@ -74,9 +89,6 @@ Public Class DownloadPage
         download.Margin = New Thickness(10, i * 10, 10, 0)
         download.VerticalAlignment = Windows.VerticalAlignment.Top
 
-        'Adding it to the downloads list
-        downloads.Add(download)
-
         download = Nothing
 
         Return True
@@ -86,8 +98,8 @@ Public Class DownloadPage
 #Region "Initiation"
     Private Sub initDelegates()
         _showDownload = New ShowDownload(AddressOf NewDownload)
-        _startDownload = New StartDownload(AddressOf SingleDownloadStart)
         _singleDownload = New PrepareSingleDownload(AddressOf SingleDownload)
+        _multiDownload = New PrepareMultiDownload(AddressOf MultiDownload)
     End Sub
 
     Public Sub New()
@@ -110,7 +122,6 @@ Public Class DownloadPage
         _chapter = Chapter
         _mangaName = MangaName
 
-        downloads = New List(Of ChapterDownloader)
     End Sub
 
     Public Sub New(ByVal MangaName As String, ByVal Chapters() As MangaChaptersDetails)
@@ -123,8 +134,10 @@ Public Class DownloadPage
         _chapters = Chapters
         _mangaName = MangaName
 
-        downloads = New List(Of ChapterDownloader)
     End Sub
 #End Region
 
+    Private Sub btClose_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btClose.Click
+        Me.Close()
+    End Sub
 End Class

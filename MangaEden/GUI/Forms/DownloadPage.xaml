@@ -15,9 +15,17 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-       <ScrollViewer >
-        <Grid x:Name="gridContainer">
-        </Grid>
-    </ScrollViewer>
+    <Grid>
+       <ScrollViewer Margin="0,0,0,35">
+            <Grid x:Name="gridContainer">
+            </Grid>
+        </ScrollViewer>
+        <Button Height="27" HorizontalAlignment="Right" Margin="0,0,2,4" Name="btClose" TabIndex="10" VerticalAlignment="Bottom" Width="107">
+            <StackPanel Orientation="Horizontal">
+                <Image Height="16" Margin="0,-1,0,0" Name="Image6" Source="/MangaEden;component/Images/discard.png" Stretch="None" Width="16" />
+                <TextBlock Foreground="Black" Text="  CLOSE" />
+            </StackPanel>
+        </Button>
+    </Grid>
 </Controls:MetroWindow>
 

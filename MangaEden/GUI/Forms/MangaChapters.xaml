@@ -19,7 +19,7 @@
     </Window.Resources>
 
     <Grid>
-        <ListBox Background="White" Margin="2,64,4,41" Name="lstChapters">
+        <ListBox Background="White" Margin="2,64,4,41" Name="lstChapters" SelectionMode="Extended">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
