@@ -1,6 +1,10 @@
 ﻿Option Explicit On
 
 Namespace Converters
+    ''' <summary>
+    ''' This class is used when binding values to a component to convert boolean value into visibility value.
+    ''' </summary>
+    ''' <remarks></remarks>
     <ValueConversionAttribute(GetType(Boolean), GetType(Visibility))> _
     Public Class BoolToVisibilityConverter
         Implements IValueConverter
