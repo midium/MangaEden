@@ -96,6 +96,10 @@ Class MainWindow
 
     End Sub
 
+    Private Sub MainWindow_Closing(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
+        End
+    End Sub
+
     Private Sub MainWindow_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         _loadThread.Start()
     End Sub
