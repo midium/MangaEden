@@ -1,8 +1,17 @@
 ﻿Option Explicit On
 
+''' <summary>
+''' Support class that will contains the list of the images paths that will be used by the chapter viewer or downloader
+''' </summary>
+''' <remarks></remarks>
 Public Class ChapterImages
+    'The paths container
     Public Property images() As List(Of List(Of Object))
 
+    ''' <summary>
+    ''' Images list sorter
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub Sort()
         Dim tmp As Object = Nothing
 
