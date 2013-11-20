@@ -67,9 +67,11 @@ Public Class ChapterDownloader
 
     Private Sub UpdateTitle()
         If Not _chapterInfo Is Nothing Then
-            lblTitle.Content = String.Format("{0} - {1}: {2}", _mangaTitle, _chapterInfo.Number, _chapterInfo.Title)
+            lblTitle.Content = String.Format("Manga: {0}", _mangaTitle)
+            lblChapter.Content = String.Format("Chapter: {0} - {1}", _chapterInfo.Number, _chapterInfo.Title)
         Else
-            lblTitle.Content = String.Format("{0}", _mangaTitle)
+            lblTitle.Content = String.Format("Manga: {0}", _mangaTitle)
+            lblChapter.Content = "Chapter:"
         End If
 
     End Sub
