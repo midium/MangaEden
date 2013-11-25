@@ -15,5 +15,11 @@
             </StackPanel>
         </Button>
         <TextBox Height="28" Margin="10,32,10,0" Name="txtTitle" VerticalAlignment="Top" />
+        <Button Height="27" Margin="10,0,0,17" Name="btDownloaded" TabIndex="10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="168">
+            <StackPanel Orientation="Horizontal">
+                <Image Height="16" Margin="0,-1,0,0" Name="Image1" Source="/MangaEden;component/Images/download.png" Stretch="Fill" Width="16" />
+                <TextBlock Foreground="Black" Text="  DOWNLOADED MANGAS" />
+            </StackPanel>
+        </Button>
     </Grid>
 </UserControl>

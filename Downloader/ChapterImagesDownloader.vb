@@ -115,7 +115,7 @@ Public Class ChapterImagesDownloader
 
             If _settings.DownloadMode = AppManager.eDownloadMode.Folder Then
                 'As I need to download to a folder I check if it exists or not and eventually I create it
-                _destinationFolder = String.Format("{0}\{1}", _destinationFolder, _chapterNumber)
+                _destinationFolder = String.Format("{0}\{1}_-_{2}", _destinationFolder, _chapterNumber, _chapterTitle.Replace(" ", "_"))
                 If Not Directory.Exists(_destinationFolder) Then
                     Directory.CreateDirectory(_destinationFolder)
                 End If

@@ -8,9 +8,12 @@ Imports System.IO
 Public Class ChapterDownloader
     Private _mangaTitle As String = ""
     Private _chapterInfo As MangaChaptersDetails
+    Private _downloadedPath As String = ""
 
     Private _meAPI As API = Nothing
     Private _chapterImages As ChapterImages = Nothing
+
+    Private _bOldDownload As Boolean = False
 
     Private WithEvents _downloader As ChapterImagesDownloader
 
@@ -38,6 +41,12 @@ Public Class ChapterDownloader
 #End Region
 
 #Region "Properties"
+    Public WriteOnly Property DownloadedPath As String
+        Set(value As String)
+            _downloadedPath = value
+        End Set
+    End Property
+
     Public WriteOnly Property MangaTitle As String
         Set(value As String)
             _mangaTitle = value
@@ -120,7 +129,7 @@ Public Class ChapterDownloader
     End Sub
 #End Region
 
-    Public Sub New()
+    Public Sub New(Optional ByVal bOldDownload As Boolean = False)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -132,10 +141,18 @@ Public Class ChapterDownloader
         _updateStatus = New UpdateStatus(AddressOf UpdateStatusDelegate)
         _updateProgress = New UpdateProgress(AddressOf UpdateProgressDelegate)
         _enableButtons = New EnableButtons(AddressOf EnableButtonsDelegate)
+
+        _bOldDownload = bOldDownload
     End Sub
 
     Private Sub ChapterDownloader_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        _run.Start()
+        If Not _bOldDownload Then
+            _run.Start()
+        Else
+            UpdateStatusDelegate("Status: Download Completed")
+            UpdateProgressDelegate(pgbStatus.Maximum, pgbStatus.Maximum)
+            EnableButtonsDelegate(True)
+        End If
     End Sub
 
 #Region "Thread and Delegated functions"
@@ -200,8 +217,14 @@ Public Class ChapterDownloader
 
     Private Sub btView_Click(sender As Object, e As RoutedEventArgs) Handles btView.Click
         Dim frmPlay As ChapterViewer = Nothing
+        Dim sourcePath As String = ""
 
-        frmPlay = New ChapterViewer(_downloader.DownloadedPathOrFile, _mangaTitle, _chapterInfo.Title, _chapterInfo.Number, True)
+        If _bOldDownload Then
+            sourcePath = _downloadedPath
+        Else
+            sourcePath = _downloader.DownloadedPathOrFile
+        End If
+        frmPlay = New ChapterViewer(sourcePath, _mangaTitle, _chapterInfo.Title, _chapterInfo.Number, True)
 
         frmPlay.ShowDialog()
         frmPlay = Nothing
