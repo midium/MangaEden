@@ -84,7 +84,7 @@ Public Class DownloadPage
 
                             'The chapter path name must be a number
                             If IsNumeric(sChapterNumber) Then
-                                Dispatcher.Invoke(_showOldDownload, gridContainer, iCnt, sChapterNumber, "", sManga, subfldrs)
+                                Dispatcher.Invoke(_showOldDownload, gridContainer, iCnt, sChapterNumber, sChapterName, sManga, subfldrs)
                                 iCnt += 10
                             End If
                         Next

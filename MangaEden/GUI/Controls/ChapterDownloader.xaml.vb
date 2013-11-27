@@ -75,12 +75,15 @@ Public Class ChapterDownloader
     End Function
 
     Private Sub UpdateTitle()
+        lblTitle.Text = ""
+        lblTitle.Inlines.Add("Manga: ")
+        lblTitle.Inlines.Add(New Bold(New Run(_mangaTitle)))
+
+        lblChapter.Text = ""
+        lblChapter.Inlines.Add("Chapter: ")
+
         If Not _chapterInfo Is Nothing Then
-            lblTitle.Content = String.Format("Manga: {0}", _mangaTitle)
-            lblChapter.Content = String.Format("Chapter: {0} - {1}", _chapterInfo.Number, _chapterInfo.Title)
-        Else
-            lblTitle.Content = String.Format("Manga: {0}", _mangaTitle)
-            lblChapter.Content = "Chapter:"
+            lblChapter.Inlines.Add(New Bold(New Run(String.Format("{0} - {1}", _chapterInfo.Number, _chapterInfo.Title))))
         End If
 
     End Sub
@@ -189,7 +192,14 @@ Public Class ChapterDownloader
     Private Sub btDelete_Click(sender As Object, e As RoutedEventArgs) Handles btDelete.Click
 
         If MsgBox("You are about to delete the downloaded chapter. This action can't be undone." & vbCrLf & "Are you sure you want to remove it?", MsgBoxStyle.YesNo + MsgBoxStyle.Critical) = MsgBoxResult.Yes Then
-            Dim fileOrFolder As String = _downloader.DownloadedPathOrFile
+            Dim fileOrFolder As String = ""
+            If _bOldDownload Then
+                fileOrFolder = _downloadedPath
+
+            Else
+                fileOrFolder = _downloader.DownloadedPathOrFile
+
+            End If
 
             Try
 

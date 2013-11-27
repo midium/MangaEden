@@ -39,6 +39,12 @@ Public Class IORoutines
         Return result(result.GetUpperBound(0))
     End Function
 
+    ''' <summary>
+    ''' This function extract the latest folder name from a given path
+    ''' </summary>
+    ''' <param name="Path">The full file path from where extract the path</param>
+    ''' <returns>A string value containing the path name</returns>
+    ''' <remarks></remarks>
     Public Function extractPathName(ByVal Path As String) As String
         Dim result As String() = Path.Split("\")
         If result(result.GetUpperBound(0)).Trim = "" Then

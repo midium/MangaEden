@@ -6,8 +6,8 @@
              mc:Ignorable="d" Height="87" Width="645">
     <Grid>
         <Rectangle Fill="Blue" HorizontalAlignment="Left" Stroke="#FF002EFF" Width="10"/>
-        <Label x:Name="lblTitle" Content="Title" Height="21" Margin="10,0,40,0" VerticalAlignment="Top" FontWeight="Normal" FontSize="14" Padding="5,0,0,0" FontStyle="Italic" />
-        <ProgressBar x:Name="pgbStatus" Height="17" Margin="15,42,135,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="lblTitle" Text="Title" Height="21" Margin="10,0,40,0" VerticalAlignment="Top" FontWeight="Normal" FontSize="14" Padding="5,0,0,0" FontStyle="Italic" />
+        <ProgressBar x:Name="pgbStatus" Height="17" Margin="15,42,135,0" VerticalAlignment="Top" Foreground="#FF3399FF" />
         <Label x:Name="lblStatus" Content="Status:" Height="19" Margin="15,64,178,0" VerticalAlignment="Top" FontStyle="Italic" Padding="5,0,0,0"/>
         <Button HorizontalAlignment="Right" x:Name="btView" TabIndex="9" Width="80" IsEnabled="False" Margin="0,12,10,0" Height="28" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal">
@@ -23,6 +23,6 @@
         </Button>
         <Rectangle Height="1" Margin="12,0,3,0" Name="rctTop" Stroke="#FFC4C4C4" VerticalAlignment="Top" />
         <Rectangle Height="1" Margin="12,0,3,0" Name="rctBottom" Stroke="#FFC4C4C4" VerticalAlignment="Bottom" />
-        <Label Content="Title" FontSize="14" FontWeight="Normal" Height="21" Margin="10,18,40,0" Name="lblChapter" Padding="5,0,0,0" VerticalAlignment="Top" FontStyle="Italic" />
+        <TextBlock Text="Title" FontSize="14" FontWeight="Normal" Height="21" Margin="10,18,40,0" Name="lblChapter" Padding="5,0,0,0" VerticalAlignment="Top" FontStyle="Italic" />
     </Grid>
 </UserControl>
