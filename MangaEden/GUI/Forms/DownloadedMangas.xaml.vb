@@ -42,8 +42,11 @@ Public Class DownloadedMangas
                     mangaTab.Name = sManga.Replace(" ", "")
                     tabMangas.Items.Add(mangaTab)
 
+                    Dim scroller As New ScrollViewer
+                    mangaTab.Content = scroller
+
                     Dim childGrid As New Grid
-                    mangaTab.Content = childGrid
+                    scroller.Content = childGrid
 
                     'Collecting all files and folders under this path
                     Dim fls As String() = Directory.GetFiles(fld)
