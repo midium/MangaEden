@@ -16,7 +16,7 @@ Public Class SearchPanel
     End Sub
 
     Private Sub btDownloaded_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btDownloaded.Click
-        Dim fDown As New DownloadPage()
+        Dim fDown As New DownloadedMangas
         fDown.ShowDialog()
         fDown = Nothing
     End Sub

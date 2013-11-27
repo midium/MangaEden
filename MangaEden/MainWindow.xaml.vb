@@ -251,5 +251,4 @@ Class MainWindow
     Private Sub UICursor(ByVal newCursor As Cursor)
         Me.Cursor = newCursor
     End Sub
-
 End Class

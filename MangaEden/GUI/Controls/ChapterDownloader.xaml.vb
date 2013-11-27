@@ -4,16 +4,14 @@ Imports MangaEdenAPI
 Imports WebElements
 Imports System.Threading
 Imports System.IO
+Imports CommonRoutines
 
 Public Class ChapterDownloader
     Private _mangaTitle As String = ""
     Private _chapterInfo As MangaChaptersDetails
-    Private _downloadedPath As String = ""
 
     Private _meAPI As API = Nothing
     Private _chapterImages As ChapterImages = Nothing
-
-    Private _bOldDownload As Boolean = False
 
     Private WithEvents _downloader As ChapterImagesDownloader
 
@@ -41,12 +39,6 @@ Public Class ChapterDownloader
 #End Region
 
 #Region "Properties"
-    Public WriteOnly Property DownloadedPath As String
-        Set(value As String)
-            _downloadedPath = value
-        End Set
-    End Property
-
     Public WriteOnly Property MangaTitle As String
         Set(value As String)
             _mangaTitle = value
@@ -69,11 +61,6 @@ Public Class ChapterDownloader
 #End Region
 
 #Region "Routines"
-    Private Function isFolder(ByVal path As String) As Boolean
-        Dim fl As FileAttribute = File.GetAttributes(path)
-        Return ((fl And FileAttribute.Directory) = FileAttribute.Directory)
-    End Function
-
     Private Sub UpdateTitle()
         lblTitle.Text = ""
         lblTitle.Inlines.Add("Manga: ")
@@ -146,18 +133,10 @@ Public Class ChapterDownloader
         _updateStatus = New UpdateStatus(AddressOf UpdateStatusDelegate)
         _updateProgress = New UpdateProgress(AddressOf UpdateProgressDelegate)
         _enableButtons = New EnableButtons(AddressOf EnableButtonsDelegate)
-
-        _bOldDownload = bOldDownload
     End Sub
 
     Private Sub ChapterDownloader_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        If Not _bOldDownload Then
-            _run.Start()
-        Else
-            UpdateStatusDelegate("Status: Download Completed")
-            UpdateProgressDelegate(pgbStatus.Maximum, pgbStatus.Maximum)
-            EnableButtonsDelegate(True)
-        End If
+        _run.Start()
     End Sub
 
 #Region "Thread and Delegated functions"
@@ -196,18 +175,12 @@ Public Class ChapterDownloader
     Private Sub btDelete_Click(sender As Object, e As RoutedEventArgs) Handles btDelete.Click
 
         If MsgBox("You are about to delete the downloaded chapter. This action can't be undone." & vbCrLf & "Are you sure you want to remove it?", MsgBoxStyle.YesNo + MsgBoxStyle.Critical) = MsgBoxResult.Yes Then
-            Dim fileOrFolder As String = ""
-            If _bOldDownload Then
-                fileOrFolder = _downloadedPath
-
-            Else
-                fileOrFolder = _downloader.DownloadedPathOrFile
-
-            End If
+            Dim fileOrFolder As String = _downloader.DownloadedPathOrFile
 
             Try
+                Dim ioSubs As New IORoutines
 
-                If isFolder(fileOrFolder) Then
+                If ioSubs.isFolder(fileOrFolder) Then
                     'It has been download to folder
                     Directory.Delete(fileOrFolder, True)
                 Else
@@ -233,11 +206,8 @@ Public Class ChapterDownloader
         Dim frmPlay As ChapterViewer = Nothing
         Dim sourcePath As String = ""
 
-        If _bOldDownload Then
-            sourcePath = _downloadedPath
-        Else
-            sourcePath = _downloader.DownloadedPathOrFile
-        End If
+        sourcePath = _downloader.DownloadedPathOrFile
+
         frmPlay = New ChapterViewer(sourcePath, _mangaTitle, _chapterInfo.Title, _chapterInfo.Number, True)
 
         frmPlay.ShowDialog()

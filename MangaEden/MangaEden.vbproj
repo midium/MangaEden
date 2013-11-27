@@ -88,6 +88,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="GUI\Controls\DownloadedMangaItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GUI\Controls\MangaInfoControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -97,6 +101,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\Controls\SearchPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\Forms\DownloadedMangas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -137,6 +145,9 @@
     <Compile Include="GUI\Controls\ChapterDownloader.xaml.vb">
       <DependentUpon>ChapterDownloader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Controls\DownloadedMangaItem.xaml.vb">
+      <DependentUpon>DownloadedMangaItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Controls\MangaInfoControl.xaml.vb">
       <DependentUpon>MangaInfoControl.xaml</DependentUpon>
     </Compile>
@@ -145,6 +156,9 @@
     </Compile>
     <Compile Include="GUI\Controls\SearchPanel.xaml.vb">
       <DependentUpon>SearchPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Forms\DownloadedMangas.xaml.vb">
+      <DependentUpon>DownloadedMangas.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\Forms\DownloadPage.xaml.vb">
       <DependentUpon>DownloadPage.xaml</DependentUpon>

@@ -1,5 +1,7 @@
 ﻿Option Explicit On
 
+Imports System.IO
+
 ''' <summary>
 ''' This class contains IO, file, directory routines
 ''' 
@@ -58,6 +60,17 @@ Public Class IORoutines
             Return result(result.GetUpperBound(0)).Trim
 
         End If
+    End Function
+
+    ''' <summary>
+    ''' Check if a given path is a folder or a file path
+    ''' </summary>
+    ''' <param name="path">The path to be checked</param>
+    ''' <returns>True if it is a folder, otherwise false</returns>
+    ''' <remarks></remarks>
+    Public Function isFolder(ByVal path As String) As Boolean
+        Dim fl As FileAttribute = File.GetAttributes(path)
+        Return ((fl And FileAttribute.Directory) = FileAttribute.Directory)
     End Function
 
 End Class
