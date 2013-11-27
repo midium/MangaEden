@@ -17,7 +17,7 @@ Public Class DownloadPage
 #End Region
 
 #Region "Thread and delegates"
-    Private _threads(1) As Thread
+    Private _threads As Thread
 
     'Single download delegates
     Private Delegate Function ShowDownload(ByVal objectContainer As Object, ByVal i As Integer, ByVal chapterInfo As MangaChaptersDetails, ByVal mangaName As String)
@@ -38,18 +38,19 @@ Public Class DownloadPage
         _flagRunned = True
 
         If Not _chapter Is Nothing Then
-            _threads(0) = New Thread(AddressOf InitiateSingleDownload)
-            _threads(0).Start()
+            _threads = New Thread(AddressOf InitiateSingleDownload)
+            _threads.Start()
         End If
 
         If Not _chapters Is Nothing Then
-            _threads(0) = New Thread(AddressOf InitiateMultiDownload)
-            _threads(0).Start()
+            _threads = New Thread(AddressOf InitiateMultiDownload)
+            _threads.Start()
         End If
 
-        _threads(1) = New Thread(AddressOf LoadDownloaded)
-        _threads(1).Start()
-
+        If (_chapter Is Nothing) And (_chapters Is Nothing) Then
+            _threads = New Thread(AddressOf LoadDownloaded)
+            _threads.Start()
+        End If
 
     End Sub
 
@@ -79,12 +80,12 @@ Public Class DownloadPage
                         For Each chapterFolder As String In subfldrs
                             Dim splittedFolder As String() = ioSubs.extractPathName(chapterFolder).Split("-")
                             Dim sChapterNumber As String = splittedFolder(0).Replace("_", "")
-                            Dim sChapterName As String = splittedFolder(1).Replace("_", " ").Replace(".zip", "")
+                            Dim sChapterName As String = splittedFolder(1).Replace("_", " ").Replace(".zip", "").Trim()
 
 
                             'The chapter path name must be a number
                             If IsNumeric(sChapterNumber) Then
-                                Dispatcher.Invoke(_showOldDownload, gridContainer, iCnt, sChapterNumber, sChapterName, sManga, subfldrs)
+                                Dispatcher.Invoke(_showOldDownload, gridContainer, iCnt, sChapterNumber, sChapterName, sManga, chapterFolder)
                                 iCnt += 10
                             End If
                         Next
@@ -98,7 +99,7 @@ Public Class DownloadPage
                             If ioSubs.extractFileExtension(fl).ToLower = "zip" Then
                                 Dim splittedFile As String() = fl.Split("-")
                                 Dim sChapterNumber As String = splittedFile(1).Replace("_", "")
-                                Dim sChapterName As String = splittedFile(2).Replace("_", " ").Replace(".zip", "")
+                                Dim sChapterName As String = splittedFile(2).Replace("_", " ").Replace(".zip", "").Trim()
 
                                 'The chapter path name must be a number
                                 If IsNumeric(sChapterNumber) Then

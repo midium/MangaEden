@@ -89,6 +89,8 @@ Public Class ChapterDownloader
     End Sub
 
     Public Function startDownload()
+        rctStatus.Fill = Brushes.Orange
+
         'First I get the chapter images
         _chapterImages = _meAPI.getChapterImages(_chapterInfo.ChapterID)
         _chapterImages.Sort()
@@ -185,6 +187,8 @@ Public Class ChapterDownloader
     Private Sub EnableButtonsDelegate(ByVal enabled As Boolean)
         btDelete.IsEnabled = enabled
         btView.IsEnabled = enabled
+
+        rctStatus.Fill = Brushes.Blue
 
     End Sub
 #End Region
