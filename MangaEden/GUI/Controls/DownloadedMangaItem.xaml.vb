@@ -11,9 +11,21 @@ Public Class DownloadedMangaItem
     Private _chapterDate As String
     Private _chapterFileOrFolder As String
     Private _mangaName As String
+    Private _iID As Integer
+
+    Public Event ElementDeleted(ByVal iID As Integer, ByVal sender As Object)
 #End Region
 
 #Region "Properties"
+    Public Property iID As Integer
+        Get
+            Return _iID
+        End Get
+        Set(value As Integer)
+            _iID = value
+        End Set
+    End Property
+
     Public Property ChapterNumber As Integer
         Get
             Return _chapterNumber
@@ -69,12 +81,14 @@ Public Class DownloadedMangaItem
 #End Region
 
 #Region "Constructor"
-    Public Sub New(ByVal iChapterNumber As Integer, ByVal sChapterName As String, ByVal sDownloadDate As String, ByVal sFileOrFolder As String, ByVal sMangaName As String)
+    Public Sub New(ByVal iID As Integer, ByVal iChapterNumber As Integer, ByVal sChapterName As String, ByVal sDownloadDate As String,
+                   ByVal sFileOrFolder As String, ByVal sMangaName As String, ByVal localEventHandler As ElementDeletedEventHandler)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+        _iID = iID
         _chapterName = sChapterName
         _chapterNumber = iChapterNumber
         _chapterDate = sDownloadDate
@@ -82,6 +96,8 @@ Public Class DownloadedMangaItem
         _mangaName = sMangaName
 
         UpdateInterface()
+
+        AddHandler ElementDeleted, localEventHandler
 
     End Sub
 #End Region
@@ -119,7 +135,8 @@ Public Class DownloadedMangaItem
 
                 MsgBox(String.Format("Chapter {0} of manga {1} correctly deleted.", _chapterNumber, _mangaName), MsgBoxStyle.Information)
 
-                Me.Visibility = Windows.Visibility.Collapsed
+                'Me.Visibility = Windows.Visibility.Collapsed
+                RaiseEvent ElementDeleted(_iID, Me)
 
             Catch ex As Exception
                 MsgBox("There have been problems removing the selected chapter." & vbCrLf & "Please check that the chapter isn't open by other programs")
@@ -148,4 +165,5 @@ Public Class DownloadedMangaItem
     End Sub
 
 #End Region
+
 End Class

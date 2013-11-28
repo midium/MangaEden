@@ -8,21 +8,12 @@ Public Class DownloadedMangas
 
     Private _settings As AppManager
 
-    'TODO: Try to implement ItemControl solution (http://rachel53461.wordpress.com/2011/09/17/wpf-itemscontrol-example/)
-    '<ItemsControl ItemsSource="{Binding MyCollection}">
-    '    <ItemsControl.ItemTemplate>
-    '        <DataTemplate>
-    '            <Button Content="{Binding }" />
-    '        </DataTemplate>
-    '    </ItemsControl.ItemTemplate>
-    '</ItemsControl>
-
     Private Sub btClose_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles btClose.Click
         Me.Close()
     End Sub
 
     Private Sub LoadDownloaded()
-        Dim iCnt As Integer = 1
+        Dim iCnt As Integer = 0
         Dim ioSubs As New IORoutines
 
         'I do something just if the dowload folder exists and has child folders related to mangas
@@ -34,7 +25,7 @@ Public Class DownloadedMangas
             If fldrs IsNot Nothing AndAlso fldrs.Count > 0 Then
 
                 For Each fld As String In fldrs
-                    iCnt = 1
+                    iCnt = 0
                     Dim sManga As String = ioSubs.extractPathName(fld)
 
                     Dim mangaTab As New TabItem
@@ -42,11 +33,12 @@ Public Class DownloadedMangas
                     mangaTab.Name = sManga.Replace(" ", "")
                     tabMangas.Items.Add(mangaTab)
 
-                    Dim scroller As New ScrollViewer
-                    mangaTab.Content = scroller
-
                     Dim childGrid As New Grid
-                    scroller.Content = childGrid
+                    mangaTab.Content = childGrid
+
+                    Dim list As New ListBox
+                    childGrid.Children.Add(list)
+                    list.Padding = New Thickness(0, 0, 0, 0)
 
                     'Collecting all files and folders under this path
                     Dim fls As String() = Directory.GetFiles(fld)
@@ -64,15 +56,18 @@ Public Class DownloadedMangas
                             If IsNumeric(sChapterNumber) Then
                                 Dim fldrInfo As New DirectoryInfo(chapterFolder)
 
-                                Dim dmItem As New DownloadedMangaItem(sChapterNumber, sChapterName, fldrInfo.CreationTime().ToString("dd-MM-yyyy"), chapterFolder, sManga)
+                                Dim dmItem As New DownloadedMangaItem(iCnt, sChapterNumber, sChapterName,
+                                                                      fldrInfo.CreationTime().ToString("dd-MM-yyyy"),
+                                                                      chapterFolder, sManga, AddressOf DeleteRow)
                                 dmItem.VerticalAlignment = Windows.VerticalAlignment.Top
-                                dmItem.Margin = New Thickness(0, iCnt + 22, 0, 0)
-                                childGrid.Children.Add(dmItem)
+                                dmItem.Padding = New Thickness(0, 0, 0, 0)
+                                dmItem.Margin = New Thickness(0, 0, 0, 0)
+                                list.Items.Add(dmItem)
 
                                 fldrInfo = Nothing
                                 dmItem = Nothing
 
-                                iCnt += 22
+                                iCnt += 1
 
                             End If
                         Next
@@ -92,15 +87,19 @@ Public Class DownloadedMangas
                                 If IsNumeric(sChapterNumber) Then
                                     Dim flInfo As New FileInfo(fl)
 
-                                    Dim dmItem As New DownloadedMangaItem(sChapterNumber, sChapterName, flInfo.CreationTime().ToString("dd-MM-yyyy"), fl, sManga)
+                                    Dim dmItem As New DownloadedMangaItem(iCnt, sChapterNumber, sChapterName,
+                                                                          flInfo.CreationTime().ToString("dd-MM-yyyy"), fl, sManga,
+                                                                          AddressOf DeleteRow)
                                     dmItem.VerticalAlignment = Windows.VerticalAlignment.Top
-                                    dmItem.Margin = New Thickness(0, iCnt + 22, 0, 0)
-                                    childGrid.Children.Add(dmItem)
+                                    dmItem.Padding = New Thickness(0, 0, 0, 0)
+                                    dmItem.Margin = New Thickness(0, 0, 0, 0)
+
+                                    list.Items.Add(dmItem)
 
                                     flInfo = Nothing
                                     dmItem = Nothing
 
-                                    iCnt += 22
+                                    iCnt += 1
                                 End If
                             End If
                         Next
@@ -110,6 +109,20 @@ Public Class DownloadedMangas
 
             End If
         End If
+    End Sub
+
+    ''' <summary>
+    ''' This is the delegated function being called when DownlaodedMangaItem raise its ElementDelete funtion
+    ''' </summary>
+    ''' <param name="RowID">(Integer) This is the ID of the row</param>
+    ''' <param name="sender">(Object) This is the DownloadedMangaItem object</param>
+    ''' <remarks></remarks>
+    Private Sub DeleteRow(ByVal RowID As Integer, ByVal sender As Object)
+
+        'Retrieving containing list and removing the element
+        Dim lst As ListBox = DirectCast(sender.Parent, ListBox)
+        lst.Items.Remove(sender)
+
     End Sub
 
     Public Sub New()

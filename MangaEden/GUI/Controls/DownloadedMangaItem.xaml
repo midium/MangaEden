@@ -4,10 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="22" d:DesignWidth="700
-             " MaxHeight="22">
+             d:DesignHeight="22" d:DesignWidth="700" MinHeight="22">
     <Grid>
-        <Border BorderThickness="1" BorderBrush="#FFA7A7A7" HorizontalAlignment="Right" Width="79">
+        <Border BorderThickness="1,0,0,0" BorderBrush="#FFA7A7A7" HorizontalAlignment="Right" Width="79">
             <Grid Width="50">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20*" />
@@ -17,13 +16,13 @@
                 <Image Height="16" Name="imgDelete" Stretch="Fill" Width="16" Grid.Column="1" Source="/MangaEden;component/Images/discard.png" />
             </Grid>
         </Border>
-        <Border Margin="0,0,78,0" BorderThickness="1" BorderBrush="#FFA7A7A7" HorizontalAlignment="Right" Width="71">
+        <Border Margin="0,0,78,0" BorderThickness="1,0,0,0" BorderBrush="#FFA7A7A7" HorizontalAlignment="Right" Width="71">
             <TextBlock HorizontalAlignment="Left" Name="txtChapterDate" Text="99-99-9999" VerticalAlignment="Center" Width="Auto" Margin="3,0,0,0" />
         </Border>
-        <Border Margin="35,0,148,0" BorderThickness="1" BorderBrush="#FFA7A7A7">
+        <Border Margin="35,0,148,0" BorderThickness="1,0,0,0" BorderBrush="#FFA7A7A7">
             <TextBlock HorizontalAlignment="Left" Name="txtChapterName" Text="Example Chapter" VerticalAlignment="Center" Width="Auto" Margin="3,0,0,0" />
         </Border>
-        <Border BorderThickness="1" BorderBrush="#FFA7A7A7" HorizontalAlignment="Left" Width="36">
+        <Border BorderThickness="0,0,1,0" BorderBrush="#FFA7A7A7" HorizontalAlignment="Left" Width="36">
             <TextBlock HorizontalAlignment="Left" Name="txtChapterNumber" Text="999" VerticalAlignment="Center" Width="35" TextAlignment="Center" />
         </Border>
     </Grid>
