@@ -30,7 +30,7 @@ Public Class DownloadedMangas
 
                     Dim mangaTab As New TabItem
                     mangaTab.Header = sManga
-                    mangaTab.Name = sManga.Replace(" ", "")
+                    mangaTab.Name = sManga.Replace(" ", "").Replace("-", "")
                     tabMangas.Items.Add(mangaTab)
 
                     Dim childGrid As New Grid
@@ -48,7 +48,7 @@ Public Class DownloadedMangas
                     If subfldrs IsNot Nothing AndAlso subfldrs.Count > 0 Then
                         'Looping trough chapter folders (or at least supposed to be chapter folders)
                         For Each chapterFolder As String In subfldrs
-                            Dim splittedFolder As String() = ioSubs.extractPathName(chapterFolder).Split("-")
+                            Dim splittedFolder As String() = Split(ioSubs.extractPathName(chapterFolder), "_-_")
                             Dim sChapterNumber As String = splittedFolder(0).Replace("_", "")
                             Dim sChapterName As String = splittedFolder(1).Replace("_", " ").Replace(".zip", "").Trim()
 
@@ -79,7 +79,7 @@ Public Class DownloadedMangas
                         For Each fl As String In fls
                             'Checking if the file is a zip
                             If ioSubs.extractFileExtension(fl).ToLower = "zip" Then
-                                Dim splittedFile As String() = fl.Split("-")
+                                Dim splittedFile As String() = Split(fl, "_-_")
                                 Dim sChapterNumber As String = splittedFile(1).Replace("_", "")
                                 Dim sChapterName As String = splittedFile(2).Replace("_", " ").Replace(".zip", "").Trim()
 
