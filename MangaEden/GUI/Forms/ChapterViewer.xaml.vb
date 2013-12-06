@@ -81,6 +81,8 @@ Public Class ChapterViewer
                 _localFolder = _mangaChapter
                 _localChapterImages = Directory.GetFiles(_mangaChapter)
 
+                prvPreviews.LoadImages(_localChapterImages)
+
             Else
                 'ZIP
                 _localFolder = String.Format("{0}\{1}-{2}", My.Computer.FileSystem.SpecialDirectories.Temp, _mangaName, _chapterNumber)
@@ -128,6 +130,8 @@ Public Class ChapterViewer
                     _localChapterImages(iCounter) = fullZipToPath
                 Next
 
+                prvPreviews.LoadImages(_localChapterImages)
+
                 zipper.IsStreamOwner = True
                 zipper.Close()
 
@@ -143,6 +147,8 @@ Public Class ChapterViewer
             _chapterImages.Sort()
 
             fillPageCombo(_chapterImages.images.Count)
+
+            prvPreviews.LoadImages(_chapterImages)
 
         End If
 
@@ -174,7 +180,7 @@ Public Class ChapterViewer
 
             'Now I check if exists the chapter folder inside the manga one. If so I set the values as if required to show
             '   the local source since the beginning
-            If Directory.Exists(String.Format("{0}\{1}", chapterFolder, _chapterNumber)) Then
+            If Directory.Exists(String.Format("{0}\{1}_-_{2}", chapterFolder, _chapterNumber, _chapterTitle.Replace(" ", "_"))) Then
                 _mangaChapter = String.Format("{0}\{1}", chapterFolder, _chapterNumber)
                 _flgFromDisk = True
             End If
@@ -272,5 +278,9 @@ Public Class ChapterViewer
                 Me.Cursor = Cursors.Arrow
             End If
         End If
+    End Sub
+
+    Private Sub prvPreviews_PageSelected(imgSource As BitmapImage) Handles prvPreviews.PageSelected
+        imgPage.Source = imgSource
     End Sub
 End Class
