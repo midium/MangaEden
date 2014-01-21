@@ -72,9 +72,14 @@ Public Class MangaInfoControl
                     Dim image As BitmapImage
 
                     If File.Exists(localPath) Then
-                        Dim localURI As New Uri(localPath)
+                        Dim info As FileInfo = New FileInfo(localPath)
+                        If info.Length > 0 Then
+                            Dim localURI As New Uri(localPath)
 
-                        image = New BitmapImage(localURI)
+                            image = New BitmapImage(localURI)
+                        Else
+                            image = Nothing
+                        End If
                     Else
                         image = Nothing
                     End If

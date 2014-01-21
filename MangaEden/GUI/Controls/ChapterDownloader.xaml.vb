@@ -5,8 +5,11 @@ Imports WebElements
 Imports System.Threading
 Imports System.IO
 Imports CommonRoutines
+Imports SettingsManager
 
 Public Class ChapterDownloader
+    Private _settings As AppManager = Nothing
+
     Private _mangaTitle As String = ""
     Private _chapterInfo As MangaChaptersDetails
 
@@ -76,29 +79,36 @@ Public Class ChapterDownloader
     End Sub
 
     Public Function startDownload()
-        rctStatus.Fill = Brushes.Orange
+        If Directory.Exists(_settings.DownloadFolder) Then
+            rctStatus.Fill = Brushes.Orange
 
-        'First I get the chapter images
-        _chapterImages = _meAPI.getChapterImages(_chapterInfo.ChapterID)
-        _chapterImages.Sort()
+            'First I get the chapter images
+            _chapterImages = _meAPI.getChapterImages(_chapterInfo.ChapterID)
+            _chapterImages.Sort()
 
-        Dim chapterImages As String() = Nothing
-        Dim i As Integer = -1
-        For Each img As Object In _chapterImages.images
-            i += 1
-            ReDim Preserve chapterImages(i)
-            chapterImages(i) = img(1)
-        Next
+            Dim chapterImages As String() = Nothing
+            Dim i As Integer = -1
+            For Each img As Object In _chapterImages.images
+                i += 1
+                ReDim Preserve chapterImages(i)
+                chapterImages(i) = img(1)
+            Next
 
-        _downloader = New ChapterImagesDownloader(chapterImages, _mangaTitle, _chapterInfo.Number, _chapterInfo.Title)
-        _runDownload = New RunDownload(AddressOf _downloader.BeginDownload)
-        Try
-            Dispatcher.Invoke(_runDownload)
-        Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.Critical)
-        End Try
+            _downloader = New ChapterImagesDownloader(chapterImages, _mangaTitle, _chapterInfo.Number, _chapterInfo.Title)
+            _runDownload = New RunDownload(AddressOf _downloader.BeginDownload)
+            Try
+                Dispatcher.Invoke(_runDownload)
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical)
+            End Try
 
-        Return True
+            Return True
+        Else
+            rctStatus.Fill = Brushes.Red
+            UpdateStatusDelegate("ERROR: The specified download folder isn't available. Please check the application settings to proceed.")
+
+            Return False
+        End If
 
     End Function
 #End Region
@@ -127,6 +137,9 @@ Public Class ChapterDownloader
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+        _settings = New AppManager
+        _settings.LoadSettings()
+
         _meAPI = New API
         _executeDownload = New ExecuteDownload(AddressOf startDownload)
         _run = New Thread(AddressOf Timer)
