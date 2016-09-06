@@ -190,7 +190,7 @@ Public Class ChapterImagesDownloader
     End Function
 
     Private Function CreateChapterZIP()
-        Dim destinationFile As String = String.Format("{0}\{1}", _zipDestinationFolder, String.Format("{0}_-_{1}_-_{2}.zip", _mangaTitle, _chapterNumber, _chapterTitle.Replace(" ", "_").Replace("?", "")))
+        Dim destinationFile As String = String.Format("{0}\{1}", _zipDestinationFolder, String.Format("{0}_-_{1}_-_{2}.zip", _mangaTitle, _chapterNumber, _chapterTitle.Replace(" ", "_").Replace("?", "").Replace("/", "-").Replace("\", "-")))
         Dim fileStream As New FileStream(destinationFile, FileMode.Create)
         Dim zipper As New ZipOutputStream(fileStream)
 
